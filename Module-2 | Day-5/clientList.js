@@ -8,7 +8,7 @@ app.get('/', (req,res) => {
 
 
     Request.get({
-        "headers": { "content-type": "application/json", "Authorization":"Basic YWIzMDczNDYxMTY5YmU0ODJjNGJlYzY0OGMzYzJlMjc6" },
+        "headers": { "content-type": "application/json", "Authorization":"Basic YWIzMDczNDYxMTY5YmU0ODJjNGJlYzY0OGMzYzJlMjc6" }, 
         "url": "https://api.createsend.com/api/v3.1/clients.json"
       
     }, (error, response, body) => {
