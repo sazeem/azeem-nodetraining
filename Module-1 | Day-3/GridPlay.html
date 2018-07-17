@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>GridPlay</title>
+<style>	
+table{
+	border:1px solid black;		
+}
+tr{
+	border:1px solid black;
+}
+td{
+	border:1px solid black;
+	
+	
+}
+button{
+	background-color:gray;
+	color:white;
+		
+}
+input[type="button"]{
+	background-color:gray;
+	color:white;
+	width: 100%;
+}
+
+</style>
+
+<script src="JavaScript-DOM.js"></script>
+
+</head>
+<body>
+
+	<table align="center">	
+		<tr>
+			<td>
+				<input type="radio" name="color" onclick="colorValue(this.value)" value="red" />red
+				<input type="radio" name="color" onclick="colorValue(this.value)" value="blue"/>blue
+				<input type="radio" name="color" onclick="colorValue(this.value)" value="green"/>green
+			</td>
+		</tr>
+	</table>
+	<table width="20%" height="20%" align="center" style="margin-top: 5px">
+		<tr>
+			<td><input type="button" value="1" id="1" onclick= "colorMe(this.value)"/></td>
+			<td><input type="button" value="2" id="2" onclick= "colorMe(this.value)"/></td>
+			<td><input type="button" value="3" id="3" onclick= "colorMe(this.value)"/></td>
+		</tr>	
+		<tr>
+			<td><input type="button" value="4" id="4" onclick= "colorMe(this.value)"/></td>
+			<td><input type="button" value="5" id="5" onclick= "colorMe(this.value)"/></td>
+			<td><input type="button" value="6" id="6" onclick= "colorMe(this.value)"/></td>
+		</tr>	
+		<tr>
+			<td><input type="button" value="7" id="7" onclick= "colorMe(this.value)"/></td>
+			<td><input type="button" value="8" id="8" onclick= "colorMe(this.value)"/></td>
+			<td><input type="button" value="9" id="9" onclick= "colorMe(this.value)"/></td>
+		</tr>	
+
+	</table>
+	<button style= "margin-left:48% ;margin-top:5px" onclick="refresh()">reset</button>
+
+	
+</body>
+</html>
