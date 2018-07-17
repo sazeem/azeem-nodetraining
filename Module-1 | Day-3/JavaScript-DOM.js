@@ -1,13 +1,14 @@
 var colorSelected;
+
 function colorValue(color){
-	colorSelected=color;
+  colorSelected=color;
 }
 
 function colorMe(number){
-	document.getElementById(number).style.backgroundColor=colorSelected;
+  document.getElementById(number).style.backgroundColor=colorSelected;
 }
 
 function refresh(){
-	window.location.reload();
+  window.location.reload();
 }
 
