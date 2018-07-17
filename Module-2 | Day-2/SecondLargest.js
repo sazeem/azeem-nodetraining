@@ -1,22 +1,21 @@
 ﻿function secondLargest(array) {
-  var lar=array[0],secLar;
+  var lar = array[0],secLar;
 
-  for (var i = 1; i < array.length; i++) {
-    if (array[i] > lar) {
-      lar = array[i];
+  for (var index = 1; index < array.length; index++){
+    if (array[index] > lar) {
+      lar = array[index];
     }
   }
-    
+
   if(array[0]==lar)
       secLar=array[1];
   else
       secLar=array[0];
     
-  for (var j = 0; j < array.length; j++) {
-    if (array[j] >= secLar && array[j] < lar && secLar != lar) {
-      secLar = array[j];
+  for (var index = 0; index < array.length; index++) {
+    if (array[index] >= secLar && array[index] < lar && secLar != lar){
+      secLar = array[index];
     }
   }
-
   return secLar;
 }
