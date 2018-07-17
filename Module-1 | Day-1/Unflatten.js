@@ -1,4 +1,4 @@
-﻿function unflatten(flatObject) {
-  // Write your code here
+﻿function unflatten(flatObject){
+  
 }
 
