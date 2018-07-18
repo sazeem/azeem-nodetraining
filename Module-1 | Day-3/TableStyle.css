@@ -1,0 +1,18 @@
+table{
+  border:1px solid black;   
+}
+tr{
+  border:1px solid black;
+}
+td{
+  border:1px solid black;  
+}
+button{
+  background-color:gray;
+  color:white;
+}
+input[type="button"]{
+  background-color:gray;
+  color:white;
+  width: 100%;
+}
