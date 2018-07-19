@@ -31,7 +31,7 @@ const middleware = function(req,res,next){
 
 app.get('/clients', (req,res) => {
   
-  const token = req.headers['authorization'];
+  const token = req.headers['campaign'];
   Request.get({     
     "headers": { "content-type" : "application/json", "Authorization" : token },
     "url": "https://api.createsend.com/api/v3.1/clients.json"
@@ -47,7 +47,7 @@ app.get('/clients', (req,res) => {
 app.get('/clients/:clientId', (req,res) => {
 
   const clientId = req.params.clientId;
-  const token = req.headers['authorization'];
+  const token = req.headers['campaign'];
   Request.get({
     "headers": { "content-type": "application/json", "Authorization" : token },
     "url": "https://api.createsend.com/api/v3.2/clients/"+clientId+".json"    
@@ -62,7 +62,7 @@ app.get('/clients/:clientId', (req,res) => {
 app.get('/clients/lists/:clientId', (req,res) => {
 
   const clientId = req.params.clientId;
-  const token = req.headers['authorization'];
+  const token = req.headers['campaign'];
   Request.get({
     "headers": { "content-type": "application/json", "Authorization": token },
     "url": "https://api.createsend.com/api/v3.2/clients/"+clientId+"/lists.json"
