@@ -14,7 +14,7 @@ const middleware = function(req,res,next){
   }
   else if(auth) {
     const tmp = auth.split(' ');
-    const buf = new Buffer(tmp[1], 'base64');
+    const buf = Buffer.from(tmp[1], 'base64');
     const plain_auth = buf.toString();
     const creds = plain_auth.split(':');
     const username = creds[0];
