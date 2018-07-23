@@ -1,4 +1,4 @@
-﻿function flatten(unflatObject) {     
+﻿const Flatten = function(unflatObject) {     
   var output={};            
   var rec_key='';
 
@@ -19,3 +19,4 @@
   flatter(unflatObject,rec_key);              
   return output;             
 }
+module.exports = {Flatten};

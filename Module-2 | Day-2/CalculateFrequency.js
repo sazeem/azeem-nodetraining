@@ -1,4 +1,4 @@
-﻿var CalculateFrequency = function(string) {
+﻿const CalculateFrequency = function(string) {
 
   var array = string.split("");
   var set = new Set(array);
@@ -25,3 +25,5 @@
   }    
   return(output);
 };
+
+module.exports = {CalculateFrequency};

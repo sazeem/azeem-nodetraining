@@ -1,4 +1,5 @@
-﻿function secondLargest(array) {
+﻿const SecondLargest = function (array) {
+
   var lar = array[0],secLar;
 
   for (var index = 1; index < array.length; index++){
@@ -17,5 +18,7 @@
       secLar = array[index];
     }
   }
-  return secLar;
+  return(secLar);
 }
+
+module.exports = {SecondLargest};

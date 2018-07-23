@@ -1,4 +1,5 @@
-﻿function unflatten(flatObject){
+﻿function Unflatten(flatObject){
   
 }
 
+module.exports = {Unflatten};
