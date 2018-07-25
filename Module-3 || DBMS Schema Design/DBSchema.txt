@@ -1,0 +1,34 @@
+CREATE TABLE projects
+(
+  ProjectID INT UNSIGNED,
+  ProjectName VARCHAR(200),
+  ManagerID INT UNSIGNED,
+  Duration(Days) INT UNSIGNED,
+  Cost(INR) INT UNSIGNED,
+  PRIMARY KEY(ProjectID)
+);
+
+CREATE TABLE employees
+(
+  EmpID INT UNSIGNED,
+  EmpName VARCHAR(100),  
+  DOB DATE,
+  Salary INT UNSIGNED,
+  ReportManagerID INT UNSIGNED,
+  PRIMARY KEY(EmpID)
+);
+
+CREATE TABLE roles
+(
+  RoleID INT UNSIGNED,
+  RoleName VARCHAR(100),
+  PRIMARY KEY(RoleID)
+);
+
+CREATE TABLE work
+(
+  ID INT UNSIGNED AUTO_INCREMENT,
+  ProjectID INT UNSIGNED,
+  EmpID INT UNSIGNED,
+  RoleId INT UNSIGNED
+);
