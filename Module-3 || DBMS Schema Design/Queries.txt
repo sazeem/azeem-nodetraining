@@ -3,8 +3,8 @@ select projects.ProjectID,projects.ProjectName,work.EmpID,EmpName,work.RoleId,Ro
 
 select projects.ProjectID,projects.ProjectName,work.EmpID,EmpName,work.RoleId,RoleName from work,employees,projects,roles where work.ProjectID=1 and employees.EmpID=work.EmpID and projects.ProjectID=work.ProjectID and roles.RoleID=work.RoleId order by ProjectID;
  
-select * from (select * from projects limit 5) as t where t.ProjectName like 'aa%'; 
+select * from projects where ProjectName like 'aa%' limit 5;
 
-select emps.EmpID,emps.EmpName from (select * from employees limit 5) as emps,work,roles where work.EmpID = emps.EmpID and roles.RoleID=work.RoleId and roles.RoleName ='Manager';
+select emps.EmpID,emps.EmpName from employees as emps,work,roles where work.EmpID = emps.EmpID and roles.RoleID=work.RoleId and roles.RoleName ='Manager' limit 5;
 
-select ProjectID,ProjectName as ProfitableProjects from projects where Cost <= (select sum(Salary) from work,employees,projects,roles where work.ProjectID=1 and employees.EmpID=work.EmpID and projects.ProjectID=work.ProjectID and roles.RoleID=work.RoleId) and ProjectID=1;
+select ProjectID,ProjectName as ProfitableProjects from projects where Cost >= (select sum(Salary) from work,employees,projects,roles where work.ProjectID=1 and employees.EmpID=work.EmpID and projects.ProjectID=work.ProjectID and roles.RoleID=work.RoleId) and ProjectID=1;
