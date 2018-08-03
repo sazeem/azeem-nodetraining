@@ -3,7 +3,7 @@ WorkController = require('../controllers/workController');
 
 const workRoutes = () => {
   const workRoutes = express.Router();
-  workRoutes.post('/works/:id', workController.assignEmpToProject);
+  workRoutes.post('/works/:id', WorkController.assignEmpToProject);
   return workRoutes;
 }
 
