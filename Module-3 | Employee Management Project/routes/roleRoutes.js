@@ -3,8 +3,8 @@ RoleController = require('../controllers/roleController');
 
 const roleRoutes =() => {
   const roleRoutes = express.Router();
-  roleRoutes.post('/role', RoleController.createRole);
-  roleRoutes.get('/role', RoleController.getRole);
+  roleRoutes.get('/roles', RoleController.getRole);
+  roleRoutes.post('/roles', RoleController.createRole);
   return roleRoutes;
 }
 

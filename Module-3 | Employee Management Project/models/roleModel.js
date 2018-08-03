@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../sequelize')
+const mapper = require('../sequelize');
 
-const Roles = sequelize.define('roles', {
+const roles = mapper.define('roles', {
   
-  RoleID: {
+  ID: {
 
     type: Sequelize.INTEGER, 
     primaryKey: true, 
@@ -19,4 +19,4 @@ const Roles = sequelize.define('roles', {
   }
 );
 
-module.exports = Roles;
+module.exports = roles;

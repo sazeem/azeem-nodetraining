@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../sequelize')
+const mapper = require('../sequelize')
 
-const Employees = sequelize.define('employees', {
+const employees = mapper.define('employees', {
   
-  EmpID: {
+  ID: {
 
     type: Sequelize.INTEGER, 
     primaryKey: true, 
@@ -15,14 +15,19 @@ const Employees = sequelize.define('employees', {
     allowNull: false
   },
 
-  Salary: Sequelize.INTEGER,
-
-  ReportingMngrID: Sequelize.INTEGER
-  
+  Salary: {
+    type: Sequelize.INTEGER,
+    allowNull: false
   },
+
+  ReportingMngrID:{
+    type: Sequelize.INTEGER,
+    allowNull: false
+  }  
+},
   { 
     timestamps: false 
   }
 );
 
-module.exports = Employees;
+module.exports = employees;

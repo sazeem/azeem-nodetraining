@@ -1,19 +1,21 @@
-var Role = require('../models/roleModel');
-
-exports.createRole = (req,res) => {
-  const data = { 
-    "RoleID":req.body.RoleID, 
-    "RoleName": req.body.RoleName    
-  }; 
-  Role.create({RoleID:data.RoleID, RoleName:data.RoleName})
-  .then(() => {
-    res.send("added new row");
-  })
-}
+var roles = require('../models/roleModel');
 
 exports.getRole = (req,res) => {
-  Role.findAll()
-  .then(role => {
-    res.send(role);
+  roles.findAll()
+  .then(roles => {
+    res.send(roles);
   })
 }
+
+exports.createRole = (req,res) => {
+  const data = {     
+    "RoleName": req.body.RoleName    
+  }; 
+  roles.create({
+    RoleName:data.RoleName
+  })
+  .then(() => {
+    res.json("New Role Added!");
+  })
+}
+

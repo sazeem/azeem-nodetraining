@@ -1,24 +1,17 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../sequelize');
-var Employees = require('./employeeModel');
-var Projects = require('./projectModel');
-var Roles = require('./roleModel');
+const mapper = require('../sequelize');
+const employees = require('./employeeModel');
+const projects = require('./projectModel');
+const roles = require('./roleModel');
 
-const Work = sequelize.define('works', {
-  
-  WorkID: {
-    type: Sequelize.INTEGER, 
-    primaryKey: true, 
-    autoIncrement: true 
-  }
-},
+const works = mapper.define('works', {},
   { 
     timestamps: false 
   }
 );
 
-Work.belongsTo(Projects, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
-Work.belongsTo(Employees, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
-Work.belongsTo(Roles, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
+works.belongsTo(projects, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
+works.belongsTo(employees, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
+works.belongsTo(roles, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
+works.removeAttribute('id');
 
-module.exports = Work;
+module.exports = works;

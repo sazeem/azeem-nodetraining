@@ -1,47 +1,55 @@
-const Projects = require('../models/projectModel');
-const Work = require('../models/workModel');
+const projects = require('../models/projectModel');
+const works = require('../models/workModel');
 const Sequelize = require('sequelize');
 
 exports.projectList = (req,res) => {
-  Projects.findAll().then(projects => {
+  projects.findAll().then(projects => {
     res.send(projects);
   })
 }
 
-exports.assignProjectToEmp = (req,res) => {
-  let {ProjectID,EmpID} = req.params;
-  let { RoleID }= req.body;
-  Work.create({
-    ProjectID: id,
-    EmpID: EmpID, 
-    RoleID: RoleID
+exports.assignEmpToProject = (req,res) => {
+  
+  const ID = req.params.id;  
+  const data = { 
+    "ProjectID":req.body.ProjectID, 
+    "RoleID": req.body.RoleID     
+  };
+  works.create({
+    projectID: data.ProjectID,
+    employeeID: ID, 
+    roleID: data.RoleID
   })
   .then(() => {
-    res.send("new mapping created")
-  })
-  .catch(()=>{
-    res.send("error while inserting your data")
-  })
+    res.send("Created New Mapping!")
+  })  
 }
 
-exports.getProjectById = (req,res) => {
-  Work.findAll({
-    attributes:['ProjectID','EmpID'],
-    where:{ ProjectID: req.params.id},
+exports.getProjectById = (req,res) => {  
+ works.findAll({
+    attributes:['projectID','employeeID'],
+    where:{ projectID: req.params.id},
     include:[ {all:true}]
   })
-  .then(workModel => {
-    res.send(workModel);
-  })
+  .then(works => {
+    res.send(works);
+  })  
 }
 
 exports.createProject = (req,res) => {
-  let {ProjectID,ProjectName,ManagerID, Duration, Cost} = req.body;
-  Projects.create({ProjectID:ProjectID, ProjectName:ProjectName, ManagerID:ManagerID, Duration:Duration, Cost:Cost})
+  const data = { 
+    "ProjectName":req.body.ProjectName, 
+    "ManagerID": req.body.ManagerID, 
+    "Duration":req.body.Duration,
+    "Cost":req.body.Cost 
+  }; 
+  projects.create({
+    ProjectName:data.ProjectName, 
+    ManagerID:data.ManagerID, 
+    Duration:data.Duration, 
+    Cost:data.Cost
+  })
   .then(() => {
-    res.send("added new row");
-  })
-  .catch(()=> {
-    res.send("error while inserting data  in project")
-  })
+    res.json("New Project Added!");
+  });
 }

@@ -1,8 +1,7 @@
 const http = require('http');
-const routes =require('./routes');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const express = require('express');
-
+const routes =require('./routes');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));

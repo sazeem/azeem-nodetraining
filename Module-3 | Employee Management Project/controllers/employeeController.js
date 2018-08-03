@@ -2,28 +2,31 @@ var employees = require('../models/employeeModel');
 
 exports.employeeList = (req,res) => {  
   employees.findAll()
-  .then(employees => {
-    res.send(employees);
-  })
-  .catch(() => console.log("error in displaying"));
+   .then(employees => {
+     res.send(employees);
+   })
+   .catch(() => console.log("Error"));
 }
 
 exports.createEmployee = (req,res) => {
-  const data = { 
-    "EmpID":req.body.EmpID, 
+  const data = {     
     "EmpName": req.body.EmpName, 
     "Salary":req.body.Salary,
     "ReportingMngrID":req.body.ReportingMngrID 
   }; 
-  employees.create({EmpID:data.EmpID, EmpName: data.EmpName, Salary: data.Salary, ReportingMngrID:data.ReportingMngrID})
-  .then(() => {
-    res.json(" rows created");
+  employees.create({
+    EmpName: data.EmpName, 
+    Salary: data.Salary, 
+    ReportingMngrID:data.ReportingMngrID
   })
+  .then(() => {
+    res.json("New Employee Added!");
+  });
 }
 
 exports.getEmployeeById = (req,res) => {
-  employees.findOne({ where: {EmpID: req.params.id} })
- .then(employees => {
-    res.send(employees);
-  })
+  employees.findOne({ where: {ID: req.params.id} })
+   .then(employees => {
+     res.send(employees);
+   })   
 }

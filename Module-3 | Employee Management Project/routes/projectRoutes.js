@@ -6,7 +6,7 @@ const projectRoutes = () => {
   projectRoutes.get('/projects', ProjectController.projectList);
   projectRoutes.post('/projects', ProjectController.createProject);
   projectRoutes.get('/projects/:id', ProjectController.getProjectById);
-  projectRoutes.post('/projects/:id', ProjectController.assignProjectToEmp);
+  projectRoutes.post('/projects/:id', ProjectController.assignEmpToProject);
   return projectRoutes;
 }
 

@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../sequelize')
+const mapper = require('../sequelize')
 
-const Projects = sequelize.define('projects', {
+const projects = mapper.define('projects', {
   
-  ProjectID: {
+  ID: {
 
     type: Sequelize.INTEGER, 
     primaryKey: true, 
@@ -27,4 +27,4 @@ const Projects = sequelize.define('projects', {
   }
 );
 
-module.exports = Projects;
+module.exports = projects;
