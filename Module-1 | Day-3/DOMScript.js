@@ -1,20 +1,20 @@
-var colorSelected;
-var colorRetain;
+let colorSelected;
+let colorRetain;
 
-function colorValue(color){
-  colorSelected=color;
-}
+const colorValue = (color) => {
+  colorSelected = color;
+};
 
-function colorMe(number){
-  document.getElementById(number).style.backgroundColor=colorSelected;
-}
+const colorMe = (number) => {
+  document.getElementById(number).style.backgroundColor = colorSelected;
+};
 
-function refresh(){
+const refresh = () => {
   colorRetain=colorSelected;
   colorSelected='gray';
   for(var index=1;index<10;index++){
     document.getElementById(index).style.backgroundColor=colorSelected;
   }
   colorSelected=colorRetain;
-}
+};
 
