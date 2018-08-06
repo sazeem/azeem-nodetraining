@@ -1,0 +1,40 @@
+--Query to fetch all non-managers of a project with id = 1
+SELECT projects.id AS project_id, projects.name AS project_name, works.employee_id AS employee_id, employees.name AS employee_name, works.role_id AS role_id, roles.name as role
+FROM works,employees,projects,roles
+WHERE works.project_id = 1
+AND employees.id = works.employee_id
+AND projects.id = works.project_id
+AND roles.id = works.role_id
+AND roles.name != 'Manager'
+ORDER BY role_id;
+
+--Query to fetch all employees of a project with id = 1, grouped by their role in project
+SELECT projects.id AS project_id, projects.name AS project_name, works.employee_id AS employee_id, employees.name AS employee_name, works.role_id AS role_id, roles.name as role
+FROM works, employees, projects,roles
+WHERE works.project_id = 1
+AND employees.id = works.employee_id
+AND projects.id = works.project_id
+AND roles.id = works.role_id
+ORDER BY role_id;
+ 
+--Query to fetch first 5 projects starting with 'aa'
+SELECT id AS project_id, name AS project_name
+FROM projects
+WHERE projects.name
+LIKE 'aa%'
+LIMIT 5;
+
+--Query to fetch first 5 employees who are manager in atleast one of the projects
+SELECT emps.id, emps.name
+FROM employees AS emps, works, roles
+WHERE emps.id = works.employee_id
+AND roles.name ='Manager'
+LIMIT 5;
+
+--Query to fetch all the projects which were profitable to the company
+SELECT projects.id AS project_id,projects.name AS profitable_projects
+FROM projects
+WHERE projects.cost >= (SELECT SUM(employees.salary * projects.duration)
+FROM works, employees, projects, roles
+WHERE employees.id = works.employee_id
+AND projects.id = works.project_id);

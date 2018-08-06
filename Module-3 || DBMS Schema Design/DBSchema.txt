@@ -1,0 +1,32 @@
+CREATE TABLE projects
+(
+  id INT UNSIGNED,
+  name VARCHAR(200),  
+  duration INT UNSIGNED,
+  cost INT UNSIGNED,
+  manager_id INT UNSIGNED,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE employees
+(
+  id INT UNSIGNED,
+  name VARCHAR(100),  
+  salary INT UNSIGNED,
+  reporting_manager_id INT UNSIGNED,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE roles
+(
+  id INT UNSIGNED,
+  name VARCHAR(100),
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE works
+(
+  project_id INT UNSIGNED,
+  employee_id INT UNSIGNED,
+  role_id INT UNSIGNED
+);
