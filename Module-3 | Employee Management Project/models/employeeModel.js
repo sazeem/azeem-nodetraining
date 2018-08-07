@@ -3,31 +3,29 @@ const mapper = require('../sequelize')
 
 const employees = mapper.define('employees', {
   
-  ID: {
+  id: {
 
     type: Sequelize.INTEGER, 
     primaryKey: true, 
     autoIncrement: true 
   },
 
-  EmpName:{
+  name:{
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    unique:true
   },
 
-  Salary: {
+  salary: {
     type: Sequelize.INTEGER,
     allowNull: false
-  },
+  }
 
-  ReportingMngrID:{
-    type: Sequelize.INTEGER,
-    allowNull: false
-  }  
 },
   { 
     timestamps: false 
   }
 );
+employees.belongsTo(employees, {foreignKey: 'reporting_manager_id', targetKey: 'id', onDelete: 'CASCADE'});
 
 module.exports = employees;

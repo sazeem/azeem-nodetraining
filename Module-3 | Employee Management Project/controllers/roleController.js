@@ -9,13 +9,16 @@ exports.getRole = (req,res) => {
 
 exports.createRole = (req,res) => {
   const data = {     
-    "RoleName": req.body.RoleName    
+    "name":req.body.name
   }; 
   roles.create({
-    RoleName:data.RoleName
+    name:data.name
   })
   .then(() => {
-    res.json("New Role Added!");
+    res.status(201).json("New Role Added!");
   })
+  .catch((err) =>{
+    res.status(400).send(err.parent.detail);
+  });
 }
 

@@ -3,15 +3,15 @@ const mapper = require('../sequelize');
 
 const roles = mapper.define('roles', {
   
-  ID: {
-
+  id: {
     type: Sequelize.INTEGER, 
     primaryKey: true, 
     autoIncrement: true 
   },
-  RoleName: {
+  name: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    unique:true
   }
   },
   { 

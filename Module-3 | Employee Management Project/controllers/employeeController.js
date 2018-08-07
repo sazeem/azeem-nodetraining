@@ -10,23 +10,31 @@ exports.employeeList = (req,res) => {
 
 exports.createEmployee = (req,res) => {
   const data = {     
-    "EmpName": req.body.EmpName, 
-    "Salary":req.body.Salary,
-    "ReportingMngrID":req.body.ReportingMngrID 
+    "name": req.body.name, 
+    "salary":req.body.salary,
+    "reporting_manager_id":req.body.reporting_manager_id 
   }; 
   employees.create({
-    EmpName: data.EmpName, 
-    Salary: data.Salary, 
-    ReportingMngrID:data.ReportingMngrID
+    name: data.name, 
+    salary: data.salary, 
+    reporting_manager_id:data.reporting_manager_id
   })
-  .then(() => {
-    res.json("New Employee Added!");
-  });
+   .then(() => {
+    res.status(201).json("New Employee Added!");
+   })
+   .catch((err) =>{
+    res.status(400).send(err.parent.detail);
+   });
 }
 
 exports.getEmployeeById = (req,res) => {
-  employees.findOne({ where: {ID: req.params.id} })
+  employees.findById(req.params.id)
    .then(employees => {
-     res.send(employees);
-   })   
+    if(employees.length == {})
+      res.status(400).send("Employee with given ID doesn't exist!");
+    res.send(employees);
+   })
+   .catch((err) =>{
+    res.status(400).send("Employee with given ID doesn't exist!");
+   });
 }

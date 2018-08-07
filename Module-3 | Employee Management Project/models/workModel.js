@@ -9,9 +9,12 @@ const works = mapper.define('works', {},
   }
 );
 
-works.belongsTo(projects, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
-works.belongsTo(employees, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
-works.belongsTo(roles, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
+works.belongsTo(projects, {foreignKey: 'project_id', targetKey: 'id', onDelete: 'CASCADE'});
+// works.belongsTo(projects, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
+works.belongsTo(employees, {foreignKey: 'employee_id', targetKey: 'id', onDelete: 'CASCADE'});
+// works.belongsTo(employees, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
+works.belongsTo(roles, {foreignKey: 'role_id', targetKey: 'id', onDelete: 'CASCADE'});
+// works.belongsTo(roles, { foreignKey: { primaryKey: true }, onDelete: 'CASCADE' });
 works.removeAttribute('id');
 
 module.exports = works;

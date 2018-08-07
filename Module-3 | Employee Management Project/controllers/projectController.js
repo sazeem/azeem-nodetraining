@@ -1,4 +1,6 @@
 const projects = require('../models/projectModel');
+const employees = require('../models/employeeModel');
+const roles = require('../models/roleModel');
 const works = require('../models/workModel');
 const Sequelize = require('sequelize');
 
@@ -10,46 +12,69 @@ exports.projectList = (req,res) => {
 
 exports.assignEmpToProject = (req,res) => {
   
-  const ID = req.params.id;  
-  const data = { 
-    "ProjectID":req.body.ProjectID, 
-    "RoleID": req.body.RoleID     
+  const project_id = req.params.id;
+  const data = {
+    "employee_id": req.body.employee_id,
+    "role_id"    : req.body.role_id
   };
   works.create({
-    projectID: data.ProjectID,
-    employeeID: ID, 
-    roleID: data.RoleID
+    project_id   : project_id,
+    employee_id  : data.employee_id, 
+    role_id      : data.role_id
   })
-  .then(() => {
-    res.send("Created New Mapping!")
-  })  
+   .then(() => {
+    res.status(201).send("Employee and Role added to the Project!");
+   })
+   .catch((err) =>{
+    res.status(400).send(err.parent.detail);
+   });
 }
 
 exports.getProjectById = (req,res) => {  
  works.findAll({
-    attributes:['projectID','employeeID'],
-    where:{ projectID: req.params.id},
-    include:[ {all:true}]
+    attributes:["project_id"],
+    where:{ project_id: req.params.id},
+    include:[{
+      model:projects,
+      attributes:["name"]
+    },
+    {
+      model:employees,
+      attributes:["name","salary"]
+    },
+    {
+      model:roles,
+      attributes:["name"]
+    }
+    ]
   })
   .then(works => {
+    if(works.length == {})
+      res.status(400).send("Project with given ID isn't mature yet!");
     res.send(works);
-  })  
+  })
+  .catch((err) =>{
+    res.status(400).send("Project with given ID isn't mature yet!");
+  });  
 }
 
 exports.createProject = (req,res) => {
   const data = { 
-    "ProjectName":req.body.ProjectName, 
-    "ManagerID": req.body.ManagerID, 
-    "Duration":req.body.Duration,
-    "Cost":req.body.Cost 
+    "name"        : req.body.name, 
+    "manager_id"  : req.body.manager_id, 
+    "duration"    : req.body.duration,
+    "cost"        : req.body.cost 
   }; 
   projects.create({
-    ProjectName:data.ProjectName, 
-    ManagerID:data.ManagerID, 
-    Duration:data.Duration, 
-    Cost:data.Cost
+    name      : data.name, 
+    manager_id: data.manager_id, 
+    duration  : data.duration, 
+    cost      : data.cost
   })
   .then(() => {
-    res.json("New Project Added!");
+    res.status(201).json("New Project Added!");
+  })
+  .catch((err) =>{
+    res.status(400).send(err.parent.detail);
   });
 }
