@@ -1,9 +1,11 @@
-var employees = require('../models/employeeModel');
+const employees = require('../models/employeeModel');
+const _ = require('lodash');
 
-exports.employeeList = (req,res) => {  
+exports.employeeList = (req,res) => {
+
   employees.findAll()
-   .then(employees => {
-     res.send(employees);
+   .then(employees => {  
+    res.send(employees);
    })
    .catch(() => console.log("Error"));
 }

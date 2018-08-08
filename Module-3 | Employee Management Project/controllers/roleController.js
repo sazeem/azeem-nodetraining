@@ -1,4 +1,4 @@
-var roles = require('../models/roleModel');
+const roles = require('../models/roleModel');
 
 exports.getRole = (req,res) => {
   roles.findAll()
