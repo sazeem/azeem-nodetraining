@@ -7,14 +7,14 @@ const contributors = mapper.define('contributors', {
   id: {
     type: Sequelize.INTEGER,    
     primaryKey: true
-  },
-  repo_name:{
-  	type: Sequelize.STRING,    
+  },  
+  name:{
+    type: Sequelize.STRING,    
   }
 },
   { 
     timestamps: false 
   }
 );
-
+contributors.belongsTo(repos, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
 module.exports = contributors;

@@ -7,7 +7,8 @@ const _ = require('lodash');
 
 exports.repoList = (req,res) => {
   const token = req.headers['authorization'];
-  const login = req.params.login;  
+  const project_id = req.params.id;
+  const login = req.params.login;
   repos.findAll().then(repos => {    
     if(repos.length == 0){
       Request.get({
@@ -25,6 +26,7 @@ exports.repoList = (req,res) => {
             obj.id = value.id;
             obj.name = value.name;
             obj.owner_id = value.owner.id;
+            obj.project_id = project_id
             new_repository.push(obj);
           });
           return new_repository;

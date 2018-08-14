@@ -22,5 +22,6 @@ const repos = mapper.define('repos', {
     timestamps: false 
   }
 );
+repos.belongsTo(projects,{foreignKey: 'project_id', targetKey: 'id', onDelete: 'CASCADE'});
 
 module.exports = repos;
