@@ -5,26 +5,25 @@ const repos = require('./repoModel');
 const commits = mapper.define('commits', {
   
   id: {
-    type: Sequelize.INTEGER, 
-    primaryKey: true, 
-    autoIncrement: true 
+    type: Sequelize.STRING, 
+    primaryKey: true
   },
   committer:{
     type: Sequelize.STRING,
-    allowNull: false,
-    unique:true
+    allowNull: false
   },
   message:{
     type: Sequelize.STRING,
-    allowNull: false,
-    unique:true
-  }  
+    allowNull: false
+  },
+  repo_name:{
+    type: Sequelize.STRING,
+    allowNull: false
+  }
 },
   { 
     timestamps: false 
   }
 );
-
-commits.belongsTo(repos, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
 
 module.exports = commits;

@@ -6,8 +6,7 @@ const repos = mapper.define('repos', {
   
   id: {
     type: Sequelize.INTEGER, 
-    primaryKey: true, 
-    autoIncrement: true 
+    primaryKey: true,     
   },
   name:{
     type: Sequelize.STRING,
@@ -23,7 +22,5 @@ const repos = mapper.define('repos', {
     timestamps: false 
   }
 );
-
-repos.belongsTo(projects, {foreignKey: 'project_id', targetKey: 'id', onDelete: 'CASCADE'});
 
 module.exports = repos;

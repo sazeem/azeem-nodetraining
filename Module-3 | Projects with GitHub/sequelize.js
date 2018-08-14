@@ -1,10 +1,12 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('employee_management','postgres', 'groot', {
+const sequelize = new Sequelize('projects_github','postgres', 'groot', {
   dialect: 'postgres',
   operatorsAliases: false 
 });
-sequelize.sync()
- .then(() => console.log("tables created"),(err) => console.log(err));
+sequelize.sync({
+	force:true
+})
+ .then(() => console.log("Tables Updated!"),(err) => console.log(err));
 
 module.exports = sequelize;

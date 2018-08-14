@@ -1,4 +1,3 @@
-const Request = require("request");
 const projects = require('../models/projectModel');
 const Sequelize = require('sequelize');
 
