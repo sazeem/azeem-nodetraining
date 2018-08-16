@@ -26,6 +26,7 @@ exports.repoList = (req,res) => {
             obj.id = value.id;
             obj.name = value.name;
             obj.owner_id = value.owner.id;
+            obj.owner_name = value.owner.login;
             obj.project_id = project_id
             new_repository.push(obj);
           });

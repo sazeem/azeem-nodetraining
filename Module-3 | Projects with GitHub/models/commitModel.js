@@ -26,4 +26,6 @@ const commits = mapper.define('commits', {
   }
 );
 
+commits.belongsTo(repos, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
+
 module.exports = commits;

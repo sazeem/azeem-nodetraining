@@ -15,14 +15,18 @@ const pull_requests = mapper.define('pull_requests', {
   user_id: {
     type: Sequelize.INTEGER    
   },
+  user_name: {
+    type: Sequelize.STRING   
+  },
   repo_name: {
-    type: Sequelize.STRING    
+    type: Sequelize.STRING
   }
-  
 },
   {
-    timestamps: false 
+    timestamps: false
   }
 );
+
+pull_requests.belongsTo(repos, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
 
 module.exports = pull_requests;

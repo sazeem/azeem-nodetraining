@@ -6,7 +6,7 @@ const repos = mapper.define('repos', {
   
   id: {
     type: Sequelize.INTEGER, 
-    primaryKey: true,     
+    primaryKey: true
   },
   name:{
     type: Sequelize.STRING,
@@ -15,7 +15,11 @@ const repos = mapper.define('repos', {
   },
   owner_id:{
     type: Sequelize.INTEGER, 
-    allowNull: false,    
+    allowNull: false    
+  },
+  owner_name:{
+    type: Sequelize.STRING, 
+    allowNull: false   
   }
 },
   { 
