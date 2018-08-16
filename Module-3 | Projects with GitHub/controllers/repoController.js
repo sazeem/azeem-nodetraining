@@ -9,8 +9,15 @@ exports.repoList = (req,res) => {
   const token = req.headers['authorization'];
   const project_id = req.params.id;
   const login = req.params.login;
-  repos.findAll().then(repos => {    
-    if(repos.length == 0){
+
+  let owner_name = [];
+
+  repos.findAll()
+  .then(repos => {
+    _.forEach(repos,(value) => {      
+      owner_name.push(value.dataValues.owner_name);
+    });
+    if(!(_.includes(owner_name,login)) || (repos.length == 0)){
       Request.get({
         "headers": { "content-type" : "application/json","User-Agent":login ,"Authorization" : token },
         "url": "https://api.github.com/users/"+ login +"/repos"
