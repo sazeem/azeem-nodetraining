@@ -3,7 +3,8 @@ PullRequestController = require('../controllers/pullRequestController');
 
 const pullRequestRoutes = () => {
   const pullRequestRoutes = express.Router();
-  pullRequestRoutes.get('/:login/:repo/pulls', PullRequestController.pullRequestList);
+  pullRequestRoutes.get('/pulls', PullRequestController.pullRequestList);
+  pullRequestRoutes.post('/pulls', PullRequestController.getPullRequestList);
   return pullRequestRoutes;
 }
 

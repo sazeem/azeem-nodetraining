@@ -4,13 +4,9 @@ const repos = require('./repoModel');
 
 const contributors = mapper.define('contributors', {
   
-  id: {
+  id:{
     type: Sequelize.INTEGER,
-    autoIncrement:true,
     primaryKey: true
-  },
-  user_id:{
-    type: Sequelize.INTEGER
   },
   name:{
     type: Sequelize.STRING,    
@@ -23,5 +19,13 @@ const contributors = mapper.define('contributors', {
     timestamps: false 
   }
 );
-contributors.belongsTo(repos, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
+contributors.belongsTo(repos, {
+  foreignKey: {
+    name:'repo_id',
+    allowNull: false,
+    primaryKey: true
+  }, 
+  targetKey: 'id',   
+  onDelete: 'CASCADE'
+});
 module.exports = contributors;

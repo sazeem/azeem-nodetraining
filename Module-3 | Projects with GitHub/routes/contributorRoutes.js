@@ -3,7 +3,8 @@ ContributorController = require('../controllers/contributorController');
 
 const contributorRoutes = () => {
   const contributorRoutes = express.Router();
-  contributorRoutes.get('/:login/:repo/contributors', ContributorController.contributorList);  
+  contributorRoutes.get('/contributors', ContributorController.contributorList);  
+  contributorRoutes.post('/contributors', ContributorController.getContributorList);
   return contributorRoutes;
 }
 
