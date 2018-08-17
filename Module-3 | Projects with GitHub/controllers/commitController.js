@@ -38,28 +38,38 @@ exports.getCommitList = (req,res) => {
         })
         .then((repos) => {                
           const mapper = (repository) => {
-            try{
-              let newRepository = [];
+            let newRepository = [];
+            try{              
               _.forEach(repository, function(value) {
                 let obj = {};
                 obj.id = value.sha;
-                obj.committer = value.commit.committer.name;
+                obj.committer = value.author.login;
                 obj.message = value.commit.message;
                 obj.repo_id = repos[0].dataValues.id;
                 obj.repo_name = repoName;
                 newRepository.push(obj);
               });
-              return newRepository;
             }
             catch{
-              res.status(400).send("Error in Request!");
+              if(Object.keys(repository[0]).length > 2)
+                res.status(400).send("Repository Doesn't Exist in database!");
+            }
+            finally{
+              return newRepository;
             }
           };
+
           let myCommits = mapper(myResponse);
+
           commit.bulkCreate(myCommits)
            .then(() => {
-            console.log("Commits Added!");
-            res.status(201).send(myCommits);
+              if(myCommits.length == 0){
+                res.status(400).send(myResponse);
+              }
+              else{
+                console.log("Commits Added!");
+                res.status(201).send(myCommits);
+              }            
            })
            .catch((err) =>{
             res.status(400).send(err);

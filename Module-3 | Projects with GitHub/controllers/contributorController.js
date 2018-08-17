@@ -36,8 +36,8 @@ exports.getContributorList = (req,res) => {
           where:{ name: repoName}
         }).then((repos) => {                
           const mapper = (repository) => {
+            let newRepository = [];
             try{
-              let newRepository = [];
               _.forEach(repository, function(value) {
                 let obj = {};
                 obj.id = value.id;
@@ -49,7 +49,11 @@ exports.getContributorList = (req,res) => {
               return newRepository;
             }
             catch{
-              res.status(400).send("Error in Request!");
+              if(Object.keys(repository[0]).length > 2)
+                res.status(400).send("Repository Doesn't Exist in database!");
+            }
+            finally{
+              return newRepository;
             }
           };
 
@@ -57,8 +61,13 @@ exports.getContributorList = (req,res) => {
 
           contributor.bulkCreate(myContributors)
            .then(() => {
-            console.log("Contributors Added!");
-            res.status(201).send(myContributors);
+            if(myContributors.length == 0){
+              res.status(400).send(myResponse);
+            }
+            else{
+              console.log("Contributors Added!");
+              res.status(201).send(myContributors);
+            }             
            })
            .catch((err) =>{
             res.status(400).send(err);
@@ -71,6 +80,7 @@ exports.getContributorList = (req,res) => {
     }
   });
 }
+
 exports.contributorList = (req,res) => {
   contributors.findAll().then(contributors => {
     res.send(contributors);

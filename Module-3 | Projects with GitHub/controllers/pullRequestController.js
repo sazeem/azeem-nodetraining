@@ -38,8 +38,8 @@ exports.getPullRequestList = (req,res) => {
         }).then((repos) => { 
 
           const mapper = (repository) => {
+            let newRepository = [];
             try{
-              let newRepository = [];
               _.forEach(repository, function(value) {
                 let obj = {};
                 obj.id = value.id;
@@ -53,16 +53,25 @@ exports.getPullRequestList = (req,res) => {
               return newRepository;
             }
             catch{
-              res.status(400).send("Error in Request!");
+              if(Object.keys(repository[0]).length > 2)
+                res.status(400).send("Repository Doesn't Exist in database!");
+            }
+            finally{
+              return newRepository;
             }
           };
 
-          const myPullRequests = mapper(myResponse);
+          let myPullRequests = mapper(myResponse);
 
           pullRequest.bulkCreate(myPullRequests)
            .then(() => {
-            console.log("Pull Requests Added!");
-            res.status(201).send(myPullRequests);
+            if(myPullRequests.length == 0){
+              res.status(400).send(myResponse);
+            }
+            else{
+              console.log("Pull Requests Added!");
+              res.status(201).send(myPullRequests);
+            }             
            })
            .catch((err) =>{
             res.status(400).send(err);

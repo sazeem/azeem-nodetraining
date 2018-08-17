@@ -28,12 +28,11 @@ exports.getRepoList = (req,res) => {
         if(error) {
           return console.dir(error);
         }
-        
         const myResponse = JSON.parse(body);
 
         const mapper = (repository) => {
-          try{
-            let newRepository = [];
+          let newRepository = [];
+          try{            
             let obj = {};
             obj.id = repository.id;
             obj.name = repository.name;
@@ -44,17 +43,27 @@ exports.getRepoList = (req,res) => {
             return newRepository;
           }
           catch{
-            res.status(400).send("Error in Request!");
+            res.status(400).send(repository);
+          }
+          finally{
+            return newRepository;
           }
         };
-        const myRepos = mapper(myResponse);
+
+        let myRepos = mapper(myResponse);
+        
         repo.bulkCreate(myRepos)
          .then(() => {
-          console.log("New Repo Added!");
-          res.status(201).send(myRepos);
+          if(myRepos.length == 0){
+            console.log("Error in Request!");
+          }
+          else{
+            console.log("New Repo Added!");
+            res.status(201).send(myRepos);
+          }
          })
-         .catch((err) =>{
-          res.status(400).send(err.parent.detail);
+         .catch((err) => {
+            res.status(400).send(err.parent.detail);
          });
       });
     }
