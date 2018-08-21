@@ -29,7 +29,7 @@ const cornCommitsService = cron.schedule("* * * * *", () => {
 });
 
 const requestGitHub = (repoList) => {
-  
+
   _.forEach(repoList,(repoName) => {
     Request.get({
       "headers": { 
@@ -57,14 +57,16 @@ const storeCommits = (repos,myResponse,repoName) => {
   let myCommits = mapper(myResponse,repos,repoName);
 
   if(myCommits.length == 0){
-    console.log("No Changes in Commits");
+    console.log("Uh, Oh. No Commits Yet!");
   }
   else{
     _.forEach(myCommits,(myCommit) => {
       commit.upsert(myCommit)
-      .then(() => {
-        console.log(myCommit);
-        console.log("Commit Added!");
+      .then((value) => {
+        if(value){
+          console.log(myCommit);
+          console.log("Commit Added!");  
+        }        
       })
       .catch((err) => {
         console.log(err);
