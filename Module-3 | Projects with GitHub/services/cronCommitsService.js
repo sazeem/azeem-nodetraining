@@ -53,7 +53,7 @@ const requestGitHub = (commits, repoList) => {
         attributes:["id"],
         where:{ name:repoName }
       })
-      .then((repos) => storeCommits(repos,myResponse,repoName,commitList));
+      .then((repos) => storeCommits(repos,myResponse,repoName));
     });
   });
 };
