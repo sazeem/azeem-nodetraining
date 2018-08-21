@@ -58,7 +58,7 @@ const storePullRequests = (repos,myResponse,repoName,res) => {
   pullRequest.bulkCreate(myPullRequests)
    .then(() => {
     if(myPullRequests.length == 0){
-      res.status(200).send("Oh. Oh. No Pull Requests Yet!");
+      res.status(200).send("Oh.Uh. No Pull Requests Yet!");
     }
     else{
       console.log("Pull Requests Added!");

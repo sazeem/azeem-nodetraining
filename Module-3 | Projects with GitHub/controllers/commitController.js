@@ -59,7 +59,7 @@ const storeCommits = (repos,myResponse,repoName,res) => {
   commit.bulkCreate(myCommits)
    .then(() => {
       if(myCommits.length == 0){
-        res.status(200).send("Oh. Oh. No Commits Yet!");
+        res.status(200).send("Oh.Uh. No Commits Yet!");
       }
       else{
         console.log("Commits Added!");
