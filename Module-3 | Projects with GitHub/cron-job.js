@@ -14,70 +14,79 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 cron.schedule("* * * * *", () => {
-
-  console.log("running a task every minute");
+  console.log("Fetching Commits Every Minute!");
   const repoName = 'project-1-sample-repo';
-  const commitList = [];
 
   commits.findAll()
-   .then((commits) => {
-    _.forEach(commits,(value) => {
-      commitList.push(value.dataValues.id);
-    });
-    Request.get({     
-      "headers": { "content-type" : "application/json", "User-Agent":"sazeem", "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" },
-      "url": "https://api.github.com/repos/sazeem/"+ repoName +"/commits"
-    },(error, response, body) => {
-      if(error) {
-        return console.dir(error);
-      }
-      const myResponse = JSON.parse(body);  
-      
-      repos.findAll({
-        attributes:["id"],
-        where:{ name: repoName}
-      })
-      .then((repos) => {
-        const mapper = (repository) => {
-          let newRepository = [];
-          try{              
-            _.forEach(repository, (value) => {
-              if(!_.includes(commitList,value.sha)){
-                let obj = {};
-                obj.id = value.sha;
-                obj.committer = value.author.login;
-                obj.message = value.commit.message;
-                obj.repo_id = repos[0].dataValues.id;
-                obj.repo_name = repoName;
-                newRepository.push(obj);
-              }
-            });
-          }
-          catch{
-            if(Object.keys(repository[0]).length > 2)
-              console.log("Repository Doesn't Exist in database!");
-          }
-          finally{
-            return newRepository;
-          }
-        };
-
-        let myCommits = mapper(myResponse);
-
-        commit.bulkCreate(myCommits)
-         .then(() => {
-            if(myCommits.length == 0){
-              console.log("No Changes in Commits");
-            }
-            else{
-              console.log("Commits Added!");
-              console.log(myCommits);
-            }            
-         })
-         .catch((err) =>{
-          console.log(err);
-         });
-      });        
-    });    
-  });
+   .then((commits) => requestGitHub(commits, repoName));
 });
+
+const requestGitHub = (commits, repoName) => {
+  const commitList = [];
+
+  _.forEach(commits,(value) => {
+    commitList.push(value.dataValues.id);
+  });
+
+  Request.get({     
+    "headers": { 
+      "content-type" : "application/json",
+      "User-Agent":"sazeem",
+      "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" 
+    },
+    "url": "https://api.github.com/repos/sazeem/"+ repoName +"/commits"
+  },(error, response, body) => {
+    if(error) {
+      return console.dir(error);
+    }
+    const myResponse = JSON.parse(body);  
+    
+    repos.findAll({
+      attributes:["id"],
+      where:{ name:repoName }
+    })
+    .then((repos) => storeCommits(repos,myResponse,repoName,commitList));
+  });    
+};
+
+const storeCommits = (repos,myResponse,repoName,commitList) => {
+  let myCommits = mapper(myResponse,repos,repoName,commitList);
+
+  commit.bulkCreate(myCommits)
+   .then(() => {
+      if(myCommits.length == 0){
+        console.log("No Changes in Commits");
+      }
+      else{
+        console.log("Commits Added!");
+        console.log(myCommits);
+      }            
+   })
+   .catch((err) =>{
+    console.log(err);
+   });
+};
+
+const mapper = (myResponse,repos,repoName,commitList) => {  
+  let newRepository = [];
+  try{              
+    _.forEach(myResponse, (value) => {
+      if(!_.includes(commitList,value.sha)){
+        let obj = {};
+        obj.id = value.sha;
+        obj.committer = value.author.login;
+        obj.message = value.commit.message;
+        obj.repo_id = repos[0].dataValues.id;
+        obj.repo_name = repoName;
+        newRepository.push(obj);
+      }
+    });
+  }
+  catch{
+    if(Object.keys(myResponse[0]).length > 2)
+      console.log("Repository Doesn't Exist in database!");
+  }
+  finally{
+    return newRepository;
+  }
+};
