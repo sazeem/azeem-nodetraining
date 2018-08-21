@@ -24,17 +24,12 @@ const cornCommitsService = cron.schedule("* * * * *", () => {
     _.forEach(repos,(value) => {
       repoList.push(value.dataValues.name);
     });
-    commits.findAll()
-    .then((commits) => requestGitHub(commits, repoList));
+    requestGitHub(repoList);
   });  
 });
 
-const requestGitHub = (commits, repoList) => {
-  const commitList = [];
-
-  _.forEach(commits,(value) => {
-    commitList.push(value.dataValues.id);
-  });
+const requestGitHub = (repoList) => {
+  
   _.forEach(repoList,(repoName) => {
     Request.get({
       "headers": { 
