@@ -62,8 +62,8 @@ const storeCommits = (repos,myResponse,repoName) => {
   else{
     _.forEach(myCommits,(myCommit) => {
       commit.upsert(myCommit)
-      .then((value) => {
-        if(value){
+      .then((changes) => {
+        if(changes){
           console.log(myCommit);
           console.log("Commit Added!");  
         }        
