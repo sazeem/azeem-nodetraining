@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
-const mapper = require('../sequelize');
-const repos = require('./repoModel');
+const Mapper = require('../sequelize');
+const Repo = require('./repoModel');
 
-const pull_requests = mapper.define('pull_requests', {
-  
+const PullRequest = Mapper.define('PullRequest', {
   id: {
     type: Sequelize.INTEGER, 
     primaryKey: true, 
@@ -27,6 +26,6 @@ const pull_requests = mapper.define('pull_requests', {
   }
 );
 
-pull_requests.belongsTo(repos, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
+PullRequest.belongsTo(Repo, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
 
-module.exports = pull_requests;
+module.exports = PullRequest;

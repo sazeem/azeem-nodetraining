@@ -1,10 +1,10 @@
 const express = require('express');
-RepoController = require('../controllers/repoController');
+const RepoController = require('../controllers/repoController');
 
 const repoRoutes = () => {
   const repoRoutes = express.Router();
-  repoRoutes.post('/projects/:id/repos', RepoController.getRepoList);
-  repoRoutes.get('/repos', RepoController.repoList);
+  repoRoutes.get('/projects/:id/repos/:repoName', RepoController.getRepoByName);
+  repoRoutes.get('/projects/:id/repos', RepoController.getRepos);
   return repoRoutes;
 }
 

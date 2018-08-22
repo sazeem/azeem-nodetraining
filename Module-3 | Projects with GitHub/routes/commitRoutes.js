@@ -3,8 +3,7 @@ CommitController = require('../controllers/commitController');
 
 const commitRoutes = () => {
   const commitRoutes = express.Router();
-  commitRoutes.post('/commits', CommitController.getCommitList);
-  commitRoutes.get('/commits', CommitController.commitList);
+  commitRoutes.get('/projects/:id/repos/:repoName/commits', CommitController.getCommits);
   return commitRoutes;
 }
 

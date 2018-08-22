@@ -1,86 +1,45 @@
-const Request = require("request");
-const repos = require('../models/repoModel');
-const repo = require('../models/repoModel');
-const Sequelize = require('sequelize');
-const bodyParser = require('body-parser');
-const _ = require('lodash');
+const Repo = require('../models/repoModel');
+const RequestGitHub = require('../services/requestGitHubService');
+const RequestGitHubForRepo = RequestGitHub.RequestGitHubForRepo;
 
-exports.repoList = (req,res) => {
-  repos.findAll().then(repos => {
-    res.send(repos);
-  });
-}
-
-exports.getRepoList = (req,res) => {
-  const token = req.headers['authorization'];
+exports.getRepoByName = (req,res) => {
+  const token = req.headers['authorization'];  
   const projectId = req.params.id;
-  const login = req.body.userName;
-  const repoName = req.body.repoName;
+  const repoName = req.params.repoName;
+  const login = req.query.login;
 
-  repos.findAll()
-  .then((repos) => requestGitHub(repos, token, projectId, login, repoName,res));
-}
-
-const requestGitHub = (repos, token, projectId, login, repoName, res) => {  
-  let ownerList = [];
-  let repoList =[];
-
-  _.forEach(repos,(value) => {      
-    ownerList.push(value.dataValues.owner_name);
-    repoList.push(value.dataValues.name);
-  });
-  if(!(_.includes(ownerList,login)) || !(_.includes(repoList,repoName)) || (repos.length == 0)){
-    Request.get({
-      "headers": { "content-type" : "application/json", "User-Agent":login, "Authorization" : token },
-      "url": "https://api.github.com/repos/"+ login + "/" + repoName
-    },(error, response, body) => {
-      if(error) {
-        return console.dir(error);
-      }
-      const myResponse = JSON.parse(body);
-
-      storeRepos(myResponse,projectId,res);
-    });
-  }
-  else
-    res.send(repos);
-};
-
-const storeRepos = (myResponse,projectId,res) => {  
-  let myRepos = mapper(myResponse,projectId,res);
-
-  repo.bulkCreate(myRepos)
-   .then((myRepos) => {
-    if(myRepos.length == 0){
-      console.log("Error in Request!");
+  Repo.findAll({
+    where:{
+      project_id:projectId,
+      name:repoName,
+      owner_name:login
+    }
+  })
+  .then((repos) => {
+    if(repos.length == 0){
+      RequestGitHubForRepo(token,projectId,repoName,login,res);
     }
     else{
-      console.log("New Repo Added!");
-      res.status(201).send(myRepos);
+      res.status(200).send(repos);
     }
-   })
-   .catch((err) => {
-      res.status(400).send(err.parent.detail);
-   });
-  
-};
+  })
+  .catch((err) => {
+    res.status(400).send(err);
+  });
+}
 
-const mapper = (repository,projectId,res) => {
-  let newRepository = [];
-  try{            
-    let obj = {};
-    obj.id = repository.id;
-    obj.name = repository.name;
-    obj.owner_id = repository.owner.id;
-    obj.owner_name = repository.owner.login;
-    obj.project_id = projectId
-    newRepository.push(obj);
-    return newRepository;
-  }
-  catch{
-    res.status(400).send(repository);
-  }
-  finally{
-    return newRepository;
-  }
-};
+exports.getRepos = (req,res) => {
+  const projectId = req.params.id;
+
+  Repo.findAll({
+    where:{
+      project_id:projectId
+    }
+  })
+  .then((repos) => {
+    res.status(200).send(repos);  
+  })
+  .catch((err) => {
+    res.status(400).send(err);
+  });
+}

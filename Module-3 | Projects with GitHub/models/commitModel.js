@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
-const mapper = require('../sequelize');
-const repos = require('./repoModel');
+const Mapper = require('../sequelize');
+const Repo = require('./repoModel');
 
-const commits = mapper.define('commits', {
-  
+const Commit = Mapper.define('Commit', {  
   id: {
     type: Sequelize.STRING, 
     primaryKey: true
@@ -26,6 +25,6 @@ const commits = mapper.define('commits', {
   }
 );
 
-commits.belongsTo(repos, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
+Commit.belongsTo(Repo, {foreignKey: 'repo_id', targetKey: 'id', onDelete: 'CASCADE'});
 
-module.exports = commits;
+module.exports = Commit;

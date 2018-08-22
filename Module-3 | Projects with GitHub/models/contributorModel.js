@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
-const mapper = require('../sequelize');
-const repos = require('./repoModel');
+const Mapper = require('../sequelize');
+const Repo = require('./repoModel');
 
-const contributors = mapper.define('contributors', {
-  
+const Contributor = Mapper.define('Contributor', {
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true
@@ -19,7 +18,7 @@ const contributors = mapper.define('contributors', {
     timestamps: false 
   }
 );
-contributors.belongsTo(repos, {
+Contributor.belongsTo(Repo, {
   foreignKey: {
     name:'repo_id',
     allowNull: false,
@@ -28,4 +27,5 @@ contributors.belongsTo(repos, {
   targetKey: 'id',   
   onDelete: 'CASCADE'
 });
-module.exports = contributors;
+
+module.exports = Contributor;
