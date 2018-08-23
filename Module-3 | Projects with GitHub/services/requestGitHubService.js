@@ -25,9 +25,15 @@ exports.RequestGitHubForRepo = (token,projectId,repoName,login,res) => {
     if(error) {
       return JSON.parse(error);
     }
-    const myResponse = JSON.parse(body);  
-    const myRepo = RepoMapper(myResponse,projectId);
-    StoreRepo(myRepo,res);
+    const myResponse = JSON.parse(body);
+    try{
+      const myRepo = RepoMapper(myResponse,projectId);
+      StoreRepo(myRepo,res);
+    }
+    catch{
+      res.status(400).send(myResponse);
+    }
+    
   });
 };
 
@@ -105,35 +111,40 @@ exports.RequestGitHubForPullRequests = (token,repoName,login,res) => {
       }
     })
     .then((repos) => {
-      const myPulls = PullRequestMapper(myResponse,repos,repoName);
-      StorePullRequests(myPulls,res);
+      try{
+        const myPulls = PullRequestMapper(myResponse,repos,repoName);
+        StorePullRequests(myPulls,res);
+      }
+      catch{
+        res.status(400).send(myResponse);
+      }
+
+      
     });
   });
 };
 
-exports.CronRequestGitHubForCommits = (repoList) => {
-  _.forEach(repoList,(repoName) => {
-    Request.get({
-      "headers": { 
-        "content-type" : "application/json",
-        "User-Agent":"sazeem",
-        "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" 
-      },
-      "url": "https://api.github.com/repos/sazeem/"+ repoName +"/commits"
-    },(error, response, body) => {
-      if(error) {
-        return console.dir(error);
-      }
-      const myResponse = JSON.parse(body);  
-      
-      Repo.findAll({
-        attributes:["id"],
-        where:{ name:repoName }
-      })
-      .then((repos) => {
-        const myCommits = CommitMapper(myResponse,repos,repoName);
-        CronStoreCommits(myCommits);
-      });
+exports.CronRequestGitHubForCommits = (login,repoName) => {
+  Request.get({
+    "headers": { 
+      "content-type" : "application/json",
+      "User-Agent":"sazeem",
+      "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" 
+    },
+    "url": `https://api.github.com/repos/${login}/${repoName}/commits`
+  },(error, response, body) => {
+    if(error) {
+      return console.dir(error);
+    }
+    const myResponse = JSON.parse(body);  
+    
+    Repo.findAll({
+      attributes:["id"],
+      where:{ name:repoName }
+    })
+    .then((repos) => {
+      const myCommits = CommitMapper(myResponse,repos,repoName);
+      CronStoreCommits(myCommits);
     });
   });
 };

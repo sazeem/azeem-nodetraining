@@ -4,12 +4,17 @@ const Contributor = require('../models/contributorModel');
 const PullRequest = require('../models/pullRequestModel');
 const _ = require('lodash');
 
-exports.StoreRepo = (myRepo,res) => {
+exports.StoreRepo = (myRepo,res) => {  
   Repo.bulkCreate(myRepo)
   .then((myRepo) => {      
     res.status(201).send(myRepo);
     console.log("New Repo Added!");
   })
+  .catch((err) => {
+    res.status(400).json({
+      "detail":err.parent.detail
+    });
+  });  
 };
 
 exports.StoreCommits = (myCommits,res) => {

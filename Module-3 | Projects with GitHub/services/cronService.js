@@ -6,17 +6,15 @@ const _ = require('lodash');
 
 const cornCommitsService = cron.schedule("* * * * *", () => {
   console.log("Fetching Commits Every Minute!");
-  const repoList = [];
 
   repos.findAll({
-      attributes:["name"]
+      attributes:["name","owner_name"]
   })
   .then((repos) => {
     _.forEach(repos,(value) => {
-      repoList.push(value.dataValues.name);
+      CronRequestGitHubForCommits(value.dataValues.owner_name,value.dataValues.name);
     });
-    CronRequestGitHubForCommits(repoList);
-  });  
+  });
 });
 
 
