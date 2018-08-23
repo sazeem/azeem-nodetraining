@@ -1,7 +1,6 @@
 const Contributor = require('../models/contributorModel');
 const Repo = require('../models/repoModel');
 const RequestGitHub = require('../services/requestGitHubService');
-const RequestGitHubForContributors = RequestGitHub.RequestGitHubForContributors;
 
 exports.getContributors = (req,res) => {
   const token = req.headers['authorization'];
@@ -17,28 +16,25 @@ exports.getContributors = (req,res) => {
     }
   })
   .then((repos) => {
-    if(repos.length == 0){
-      res.status(400).send("Repository doesn't exist in database.");
-    }
-    else{      
-      Contributor.findAll({
-        where:{
-          repo_name:repoName,
-          name:login
-        }
-      })
-      .then((Contributors) => {
-        if(Contributors.length == 0){
-          RequestGitHubForContributors(token,repoName,login,res);
-        }
-        else{
-          res.status(200).send(Contributors);
-        }
-      })
-      .catch((err) => {
-        res.status(400).send(err);
-      });
-    }
+    if(!repos.length){
+      return res.status(400).send("Repository doesn't exist in database.");
+    }    
+    Contributor.findAll({
+      where:{
+        repo_name:repoName,
+        name:login
+      }
+    })
+    .then((contributors) => {
+      if(!contributors.length){
+        const Github = new RequestGitHub(token,login,repoName);
+        return Github.requestForContributors(res);
+      }
+      res.status(200).send(contributors);
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });    
   })
   .catch((err) => {
     res.status(400).send(err);

@@ -1,164 +1,184 @@
 const Request = require('request');
 const Repo = require('../models/repoModel');
-const Mapper = require('./objectMapperService');
-const Store = require('./storeService');
-const RepoMapper = Mapper.RepoMapper;
-const CommitMapper = Mapper.CommitMapper;
-const ContributorMapper = Mapper.ContributorMapper;
-const PullRequestMapper = Mapper.PullRequestMapper;
-const StoreRepo = Store.StoreRepo;
-const StoreCommits = Store.StoreCommits;
-const CronStoreCommits = Store.CronStoreCommits;
-const StoreContributors = Store.StoreContributors;
-const StorePullRequests = Store.StorePullRequests;
+const MapperService = require('./objectMapperService');
+const StoreService = require('./storeService');
 const _ = require('lodash');
 
-exports.RequestGitHubForRepo = (token,projectId,repoName,login,res) => {
-  Request.get({
-    "headers": {
-      "content-type":"application/json",
-      "User-Agent":login,
-      "Authorization":token
-    },    
-    "url":`https://api.github.com/repos/${login}/${repoName}`
-  },(error, response, body) => {
-    if(error) {
-      return JSON.parse(error);
-    }
-    const myResponse = JSON.parse(body);
+class RequestGitHub {
 
-    try{
-      const myRepo = RepoMapper(myResponse,projectId);
-      StoreRepo(myRepo,res);
-    }
-    catch{
-      res.status(400).send(myResponse);
-    }    
-  });
-};
+  constructor(token,login,repoName){
+    this.token = token;
+    this.login = login;
+    this.repoName = repoName;
+  }
 
-exports.RequestGitHubForCommits = (token,repoName,login,res) => {
-  Request.get({     
-    "headers": { 
-      "content-type":"application/json",
-      "User-Agent":login,
-      "Authorization" : token 
-    },
-    "url": `https://api.github.com/repos/${login}/${repoName}/commits`
-  },(error, response, body) => {
-    if(error) {
-      return JSON.parse(error);
-    }
-    const myResponse = JSON.parse(body);
-
-    Repo.findAll({
-      attributes:["id"],
-      where:{
-        name:repoName
+  requestForRepo(projectId,res){    
+    Request.get({
+      "headers": {
+        "content-type":"application/json",
+        "User-Agent":this.login,
+        "Authorization":this.token
+      },    
+      "url":`https://api.github.com/repos/${this.login}/${this.repoName}`
+    },(error, response, body) => {
+      if(error) {
+        return JSON.parse(error);
       }
-    })
-    .then((repos) => {
+      const myResponse = JSON.parse(body);
+
       try{
-        const myCommits = CommitMapper(myResponse,repos,repoName);
-        StoreCommits(myCommits,res);
+        const Mapper = new MapperService(myResponse);
+        const Store = new StoreService(res);
+        const myRepo = Mapper.repoMapper(projectId);
+
+        Store.storeRepo(myRepo);
       }
       catch{
         res.status(400).send(myResponse);
-      }
+      }    
     });
-  });
-};
+  }
 
-exports.RequestGitHubForContributors = (token,repoName,login,res) => {
-  Request.get({     
-    "headers": { 
-      "content-type":"application/json",
-      "User-Agent":login,
-      "Authorization" : token 
-    },
-    "url": `https://api.github.com/repos/${login}/${repoName}/contributors`
-  },(error, response, body) => {
-    if(error) {
-      return JSON.parse(error);
-    }
-    const myResponse = JSON.parse(body);
+  requestForCommits(res) {
+    Request.get({     
+      "headers": { 
+        "content-type":"application/json",
+        "User-Agent":this.login,
+        "Authorization" :this.token 
+      },
+      "url": `https://api.github.com/repos/${this.login}/${this.repoName}/commits`
+    },(error, response, body) => {
+      if(error) {
+        return JSON.parse(error);
+      }
+      const myResponse = JSON.parse(body);
 
-    Repo.findAll({
-      attributes:["id"],
-      where:{
-        name:repoName
-      }
-    })
-    .then((repos) => {
-      try{
-        const myContributors = ContributorMapper(myResponse,repos,repoName);
-        StoreContributors(myContributors,res);
-      }
-      catch{
-        res.status(400).send(myResponse);
-      }
+      Repo.findAll({
+        attributes:["id"],
+        where:{
+          name:this.repoName
+        }
+      })
+      .then((repos) => {
+        try{
+          const Mapper = new MapperService(myResponse);
+          const Store = new StoreService(res);
+
+          const myCommits = Mapper.commitMapper(repos,this.repoName);
+
+          Store.storeCommits(myCommits);
+        }
+        catch{
+          res.status(400).send(myResponse);
+        }
+      });
     });
-  });
-};
+  }
 
-exports.RequestGitHubForPullRequests = (token,repoName,login,res) => {
-  Request.get({     
-    "headers": { 
-      "content-type":"application/json",
-      "User-Agent":login,
-      "Authorization" : token 
-    },
-    "url": `https://api.github.com/repos/${login}/${repoName}/pulls`
-  },(error, response, body) => {
-    if(error) {
-      return JSON.parse(error);
-    }
-    const myResponse = JSON.parse(body);
+  requestForContributors(res){
+    Request.get({     
+      "headers": { 
+        "content-type":"application/json",
+        "User-Agent":this.login,
+        "Authorization" :this.token 
+      },
+      "url": `https://api.github.com/repos/${this.login}/${this.repoName}/contributors`
+    },(error, response, body) => {
+      if(error) {
+        return JSON.parse(error);
+      }
+      const myResponse = JSON.parse(body);
 
-    Repo.findAll({
-      attributes:["id"],
-      where:{
-        name:repoName
-      }
-    })
-    .then((repos) => {
-      try{
-        const myPulls = PullRequestMapper(myResponse,repos,repoName);
-        StorePullRequests(myPulls,res);
-      }
-      catch{
-        res.status(400).send(myResponse);
-      }      
+      Repo.findAll({
+        attributes:["id"],
+        where:{
+          name:this.repoName
+        }
+      })
+      .then((repos) => {
+        try{
+          const Mapper = new MapperService(myResponse);
+          const Store = new StoreService(res);
+
+          const myContributors = Mapper.contributorMapper(repos,this.repoName);
+
+          Store.storeContributors(myContributors);
+        }
+        catch{
+          res.status(400).send(myResponse);
+        }
+      });
     });
-  });
-};
+  }
 
-exports.CronRequestGitHubForCommits = (login,repoName) => {
-  Request.get({
-    "headers": { 
-      "content-type" : "application/json",
-      "User-Agent":"sazeem",
-      "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" 
-    },
-    "url": `https://api.github.com/repos/${login}/${repoName}/commits`
-  },(error, response, body) => {
-    if(error) {
-      return console.dir(error);
-    }
-    const myResponse = JSON.parse(body);  
-    
-    Repo.findAll({
-      attributes:["id"],
-      where:{ name:repoName }
-    })
-    .then((repos) => {
-      try{
-        const myCommits = CommitMapper(myResponse,repos,repoName);
-        CronStoreCommits(myCommits);
+  requestForPullRequests(res){
+    Request.get({     
+      "headers": { 
+        "content-type":"application/json",
+        "User-Agent":this.login,
+        "Authorization" :this.token
+      },
+      "url": `https://api.github.com/repos/${this.login}/${this.repoName}/pulls`
+    },(error, response, body) => {
+      if(error) {
+        return JSON.parse(error);
       }
-      catch{
-        res.status(400).send(myResponse);
-      }
+      const myResponse = JSON.parse(body);
+
+      Repo.findAll({
+        attributes:["id"],
+        where:{
+          name:this.repoName
+        }
+      })
+      .then((repos) => {
+        try{
+          const Mapper = new MapperService(myResponse);
+          const Store = new StoreService(res);
+
+          const myPulls = Mapper.pullRequestMapper(repos,this.repoName);
+
+          Store.storePullRequests(myPulls);
+        }
+        catch{
+          res.status(400).send(myResponse);
+        }      
+      });
     });
-  });
-};
+  }
+
+  cronRequestForCommits(login,repoName){
+    Request.get({
+      "headers": { 
+        "content-type" : "application/json",
+        "User-Agent":"sazeem",
+        "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" 
+      },
+      "url": `https://api.github.com/repos/${login}/${repoName}/commits`
+    },(error, response, body) => {
+      if(error) {
+        return console.dir(error);
+      }
+      const myResponse = JSON.parse(body);  
+      
+      Repo.findAll({
+        attributes:["id"],
+        where:{ name:repoName }
+      })
+      .then((repos) => {
+        try{
+          const Mapper = new MapperService(myResponse);
+          const Store = new StoreService();
+
+          const myCommits = Mapper.commitMapper(repos,repoName);
+          Store.cronStoreCommits(myCommits);
+        }
+        catch(error){
+          console.log(error);
+        }
+      });
+    });
+  }
+}
+
+module.exports = RequestGitHub;

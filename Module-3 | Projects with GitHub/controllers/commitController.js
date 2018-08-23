@@ -1,7 +1,6 @@
 const Commit = require('../models/commitModel');
 const Repo = require('../models/repoModel');
 const RequestGitHub = require('../services/requestGitHubService');
-const RequestGitHubForCommits = RequestGitHub.RequestGitHubForCommits;
 
 exports.getCommits = (req,res) => {
   const token = req.headers['authorization'];
@@ -17,28 +16,25 @@ exports.getCommits = (req,res) => {
     }
   })
   .then((repos) => {
-    if(repos.length == 0){
-      res.status(400).send("Repository doesn't exist in database.");
-    }
-    else{
-      Commit.findAll({
-        where:{
-          repo_name:repoName,
-          committer:login
-        }
-      })
-      .then((commits) => {
-        if(commits.length == 0){
-          RequestGitHubForCommits(token,repoName,login,res);
-        }
-        else{
-          res.status(200).send(commits);
-        }
-      })        
-      .catch((err) => {
-        res.status(400).send(err);
-      });  
-    }
+    if(!repos.length){
+      return res.status(400).send("Repository doesn't exist in database.");
+    }    
+    Commit.findAll({
+      where:{
+        repo_name:repoName,
+        committer:login
+      }
+    })
+    .then((commits) => {
+      if(!commits.length){
+        const Github = new RequestGitHub(token,login,repoName);
+        return Github.requestForCommits(res);
+      }    
+      res.status(200).send(commits);      
+    })        
+    .catch((err) => {
+      res.status(400).send(err);
+    });    
   })
   .catch((err) => {
     res.status(400).send(err);

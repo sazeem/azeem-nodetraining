@@ -1,5 +1,5 @@
 const express = require('express');
-CommitController = require('../controllers/commitController');
+const CommitController = require('../controllers/commitController');
 
 const commitRoutes = () => {
   const commitRoutes = express.Router();

@@ -1,5 +1,5 @@
 const express = require('express');
-PullRequestController = require('../controllers/pullRequestController');
+const PullRequestController = require('../controllers/pullRequestController');
 
 const pullRequestRoutes = () => {
   const pullRequestRoutes = express.Router();

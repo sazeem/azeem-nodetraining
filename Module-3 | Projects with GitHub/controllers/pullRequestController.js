@@ -1,7 +1,6 @@
 const PullRequest = require('../models/pullRequestModel');
 const Repo = require('../models/repoModel');
 const RequestGitHub = require('../services/requestGitHubService');
-const RequestGitHubForPullRequests = RequestGitHub.RequestGitHubForPullRequests;
 
 exports.getPullRequests = (req,res) => {
   const token = req.headers['authorization'];
@@ -17,28 +16,25 @@ exports.getPullRequests = (req,res) => {
     }
   })
   .then((repos) => {
-    if(repos.length == 0){
-      res.status(400).send("Repository doesn't exist in database.");
+    if(!repos.length){
+      return res.status(400).send("Repository doesn't exist in database.");
     }
-    else{
-      PullRequest.findAll({
-        where:{
-          repo_name:repoName,
-          user_name:login
-        }
-      })
-      .then((PullRequests) => {
-        if(PullRequests.length == 0){
-          RequestGitHubForPullRequests(token,repoName,login,res);
-        }
-        else{
-          res.status(200).send(PullRequests);
-        }
-      })  
-      .catch((err) => {
-        res.status(400).send(err);
-      });
-    }
+    PullRequest.findAll({
+      where:{
+        repo_name:repoName,
+        user_name:login
+      }
+    })
+    .then((pullRequests) => {
+      if(!pullRequests.length){
+        const Github = new RequestGitHub(token,login,repoName);
+        return Github.requestForPullRequests(res);
+      }
+      res.status(200).send(pullRequests);
+    })  
+    .catch((err) => {
+      res.status(400).send(err);
+    });
   })
   .catch((err) => {
     res.status(400).send(err);
