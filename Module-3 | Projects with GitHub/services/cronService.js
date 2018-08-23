@@ -19,5 +19,3 @@ const cornCommitsService = cron.schedule("* * * * *", () => {
 
 
 module.exports = cornCommitsService;
-
-
