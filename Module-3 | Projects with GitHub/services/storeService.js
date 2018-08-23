@@ -2,6 +2,7 @@ const Repo = require('../models/repoModel');
 const Commit = require('../models/commitModel');
 const Contributor = require('../models/contributorModel');
 const PullRequest = require('../models/pullRequestModel');
+const _ = require('lodash');
 
 exports.StoreRepo = (myRepo,res) => {
   Repo.bulkCreate(myRepo)
@@ -12,46 +13,22 @@ exports.StoreRepo = (myRepo,res) => {
 };
 
 exports.StoreCommits = (myCommits,res) => {
-  Commit.bulkCreate(myCommits)
-  .then((myCommits) => {
-    if(myCommits.length == 0){
-      res.status(200).send("Uh.Oh. No Commits Yet!");
-    }
-    else{
+  if(myCommits.length == 0){
+    console.log("Uh, Oh. No Commits Yet!");
+  }
+  else{
+    Commit.bulkCreate(myCommits)
+    .then((myCommits) => {
       res.status(201).send(myCommits);
       console.log("Commits Added!");
-    }
-  })
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 };
 
-exports.StoreContributors = (myContributors,res) => {
-  Contributor.bulkCreate(myContributors)
-  .then((myContributors) => {
-    if(myContributors.length == 0){
-      res.status(200).send("Uh.Oh. No Contributors Yet!");
-    }
-    else{
-      res.status(201).send(myContributors);
-      console.log("Contributors Added!");
-    }
-  })
-};
-
-exports.StorePullRequests = (myPulls,res) => {
-  PullRequest.bulkCreate(myPulls)
-  .then((myPulls) => {
-    if(myPulls.length == 0){
-      res.status(200).send("Uh.Oh. No Pull Requests Yet!");
-    }
-    else{
-      res.status(201).send(myPulls);
-      console.log("Pull Requests Added!");
-    }
-  })
-};
-
-/*
-exports.CronStoreCommits = (myCommits,res) => {
+exports.CronStoreCommits = (myCommits) => {
   if(myCommits.length == 0){
     console.log("Uh, Oh. No Commits Yet!");
   }
@@ -70,4 +47,29 @@ exports.CronStoreCommits = (myCommits,res) => {
     })
   }
 };
-*/
+
+exports.StoreContributors = (myContributors,res) => {
+  if(myContributors.length == 0){
+    res.status(200).send("Uh.Oh. No Contributors Yet!");
+  }
+  else{
+    Contributor.bulkCreate(myContributors)
+    .then((myContributors) => {    
+      res.status(201).send(myContributors);
+      console.log("Contributors Added!");    
+    })  
+  }
+};
+
+exports.StorePullRequests = (myPulls,res) => {
+  if(myPulls.length == 0){
+    res.status(200).send("Uh.Oh. No Pull Requests Yet!");
+  }  
+  else{
+    PullRequest.bulkCreate(myPulls)
+    .then((myPulls) => {    
+      res.status(201).send(myPulls);
+      console.log("Pull Requests Added!");    
+    })
+  }
+};

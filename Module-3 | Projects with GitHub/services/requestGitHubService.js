@@ -8,11 +8,12 @@ const ContributorMapper = Mapper.ContributorMapper;
 const PullRequestMapper = Mapper.PullRequestMapper;
 const StoreRepo = Store.StoreRepo;
 const StoreCommits = Store.StoreCommits;
+const CronStoreCommits = Store.CronStoreCommits;
 const StoreContributors = Store.StoreContributors;
 const StorePullRequests = Store.StorePullRequests;
+const _ = require('lodash');
 
 exports.RequestGitHubForRepo = (token,projectId,repoName,login,res) => {
-  console.log(`https://api.github.com/repos/${login}/${repoName}`);
   Request.get({
     "headers": {
       "content-type":"application/json",
@@ -96,6 +97,7 @@ exports.RequestGitHubForPullRequests = (token,repoName,login,res) => {
       return JSON.parse(error);
     }
     const myResponse = JSON.parse(body);
+
     Repo.findAll({
       attributes:["id"],
       where:{
@@ -109,7 +111,6 @@ exports.RequestGitHubForPullRequests = (token,repoName,login,res) => {
   });
 };
 
-/*
 exports.CronRequestGitHubForCommits = (repoList) => {
   _.forEach(repoList,(repoName) => {
     Request.get({
@@ -125,11 +126,14 @@ exports.CronRequestGitHubForCommits = (repoList) => {
       }
       const myResponse = JSON.parse(body);  
       
-      repos.findAll({
+      Repo.findAll({
         attributes:["id"],
         where:{ name:repoName }
       })
-      .then((repos) => storeCommits(repos,myResponse,repoName));
+      .then((repos) => {
+        const myCommits = CommitMapper(myResponse,repos,repoName);
+        CronStoreCommits(myCommits);
+      });
     });
   });
-};*/
+};
