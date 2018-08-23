@@ -1,13 +1,15 @@
-const Request = require("request");
+const Request = require('request');
 const Repo = require('../models/repoModel');
 const Mapper = require('./objectMapperService');
 const Store = require('./storeService');
 const RepoMapper = Mapper.RepoMapper;
 const CommitMapper = Mapper.CommitMapper;
 const ContributorMapper = Mapper.ContributorMapper;
+const PullRequestMapper = Mapper.PullRequestMapper;
 const StoreRepo = Store.StoreRepo;
 const StoreCommits = Store.StoreCommits;
 const StoreContributors = Store.StoreContributors;
+const StorePullRequests = Store.StorePullRequests;
 
 exports.RequestGitHubForRepo = (token,projectId,repoName,login,res) => {
   console.log(`https://api.github.com/repos/${login}/${repoName}`);
@@ -81,7 +83,7 @@ exports.RequestGitHubForContributors = (token,repoName,login,res) => {
   });
 };
 
-exports.RequestGitHubForPullRequests = (token,repoName,login) => {
+exports.RequestGitHubForPullRequests = (token,repoName,login,res) => {
   Request.get({     
     "headers": { 
       "content-type":"application/json",
@@ -93,9 +95,17 @@ exports.RequestGitHubForPullRequests = (token,repoName,login) => {
     if(error) {
       return JSON.parse(error);
     }
-    else{
-      return JSON.parse(body);
-    }
+    const myResponse = JSON.parse(body);
+    Repo.findAll({
+      attributes:["id"],
+      where:{
+        name:repoName
+      }
+    })
+    .then((repos) => {
+      const myPulls = PullRequestMapper(myResponse,repos,repoName);
+      StorePullRequests(myPulls,res);
+    });
   });
 };
 
