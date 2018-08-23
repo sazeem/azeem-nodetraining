@@ -26,14 +26,14 @@ exports.RequestGitHubForRepo = (token,projectId,repoName,login,res) => {
       return JSON.parse(error);
     }
     const myResponse = JSON.parse(body);
+
     try{
       const myRepo = RepoMapper(myResponse,projectId);
       StoreRepo(myRepo,res);
     }
     catch{
       res.status(400).send(myResponse);
-    }
-    
+    }    
   });
 };
 
@@ -50,6 +50,7 @@ exports.RequestGitHubForCommits = (token,repoName,login,res) => {
       return JSON.parse(error);
     }
     const myResponse = JSON.parse(body);
+
     Repo.findAll({
       attributes:["id"],
       where:{
@@ -57,8 +58,13 @@ exports.RequestGitHubForCommits = (token,repoName,login,res) => {
       }
     })
     .then((repos) => {
-      const myCommits = CommitMapper(myResponse,repos,repoName);
-      StoreCommits(myCommits,res);
+      try{
+        const myCommits = CommitMapper(myResponse,repos,repoName);
+        StoreCommits(myCommits,res);
+      }
+      catch{
+        res.status(400).send(myResponse);
+      }
     });
   });
 };
@@ -76,6 +82,7 @@ exports.RequestGitHubForContributors = (token,repoName,login,res) => {
       return JSON.parse(error);
     }
     const myResponse = JSON.parse(body);
+
     Repo.findAll({
       attributes:["id"],
       where:{
@@ -83,9 +90,13 @@ exports.RequestGitHubForContributors = (token,repoName,login,res) => {
       }
     })
     .then((repos) => {
-      const myContributors = ContributorMapper(myResponse,repos,repoName);
-      console.log(myContributors);
-      StoreContributors(myContributors,res);
+      try{
+        const myContributors = ContributorMapper(myResponse,repos,repoName);
+        StoreContributors(myContributors,res);
+      }
+      catch{
+        res.status(400).send(myResponse);
+      }
     });
   });
 };
@@ -117,9 +128,7 @@ exports.RequestGitHubForPullRequests = (token,repoName,login,res) => {
       }
       catch{
         res.status(400).send(myResponse);
-      }
-
-      
+      }      
     });
   });
 };
@@ -143,8 +152,13 @@ exports.CronRequestGitHubForCommits = (login,repoName) => {
       where:{ name:repoName }
     })
     .then((repos) => {
-      const myCommits = CommitMapper(myResponse,repos,repoName);
-      CronStoreCommits(myCommits);
+      try{
+        const myCommits = CommitMapper(myResponse,repos,repoName);
+        CronStoreCommits(myCommits);
+      }
+      catch{
+        res.status(400).send(myResponse);
+      }
     });
   });
 };

@@ -9,7 +9,6 @@ exports.getPullRequests = (req,res) => {
   const repoName = req.params.repoName;
   const login = req.query.login;
 
-
   Repo.findAll({
     where:{
       project_id:projectId,
