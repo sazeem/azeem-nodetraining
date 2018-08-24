@@ -29,6 +29,7 @@ class RequestGitHub {
       try{
         const Mapper = new MapperService(myResponse);
         const Store = new StoreService(res);
+        
         const myRepo = Mapper.repoMapper(projectId);
 
         Store.storeRepo(myRepo);
