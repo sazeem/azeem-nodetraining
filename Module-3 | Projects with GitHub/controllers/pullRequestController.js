@@ -8,6 +8,9 @@ exports.getPullRequests = (req,res) => {
   const repoName = req.params.repoName;
   const login = req.query.login;
 
+  if(!login){
+    return res.status(400).send("Please Enter Username in the Query as '?login=user_name'");
+  }
   Repo.findAll({
     where:{
       project_id:projectId,
@@ -28,10 +31,14 @@ exports.getPullRequests = (req,res) => {
     .then((pullRequests) => {
       if(!pullRequests.length){
         const Github = new RequestGitHub(token,login,repoName);
-        return Github.requestForPullRequests(res);
+        return new Promise((success,error) => {
+          Github.requestForPullRequests()
+          .then((response) => success(res.status(201).send(response)))
+          .catch((err) => error(err));
+        });
       }
       res.status(200).send(pullRequests);
-    })  
+    })
     .catch((err) => {
       res.status(400).send(err);
     });

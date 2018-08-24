@@ -6,63 +6,48 @@ const _ = require('lodash');
 
 class StoreService {
 
-  constructor(res){
-    this.res = res;
-  }  
-
-  storeRepo(myRepo) {  
-    Repo.bulkCreate(myRepo)
-    .then((myRepo) => {      
-      this.res.status(201).send(myRepo);
-      console.log("New Repo Added!");
-    })
-    .catch((err) => {
-      this.res.status(400).json({
-        "detail":err.parent.detail
-      });
-    });  
+  storeRepo(myRepo){
+    return new Promise((success,error) => {
+      Repo.bulkCreate(myRepo)
+      .then((myRepo) => success(myRepo))
+      .catch((err) => error(err));
+    });    
   }
 
-  storeCommits(myCommits) {
-    if(!myCommits.length){
-      return this.res.status(200).send("Uh.Oh. No Commits Yet!");
-    }
-    Commit.bulkCreate(myCommits)
-    .then((myCommits) => {
-      this.res.status(201).send(myCommits);
-      console.log("Commits Added!");
-    })
-    .catch((err) => {
-      this.res.status(400).send(err);
+  storeCommits(myCommits){
+    return new Promise((success,error) => {
+      if(!myCommits.length){
+        return success("Uh.Oh. No Commits Yet!");
+      }
+      Commit.bulkCreate(myCommits)
+      .then((myCommits) => success(myCommits))
+      .catch((err) => error(err));
     });
   }
-  storeContributors(myContributors) {
-    if(!myContributors.length){
-      return this.res.status(200).send("Uh.Oh. No Contributors Yet!");
-    }
-    Contributor.bulkCreate(myContributors)
-    .then((myContributors) => {    
-      this.res.status(201).send(myContributors);
-      console.log("Contributors Added!");    
-    })
-    .catch((err) => {
-      this.res.status(400).send(err);
-    }); 
-  }
-  storePullRequests(myPulls) {
-    if(!myPulls.length){
-      return this.res.status(200).send("Uh.Oh. No Pull Requests Yet!");
-    }  
-    PullRequest.bulkCreate(myPulls)
-    .then((myPulls) => {    
-      this.res.status(201).send(myPulls);
-      console.log("Pull Requests Added!");    
-    })
-    .catch((err) => {
-      this.res.status(400).send(err);
+
+  storeContributors(myContributors){
+    return new Promise((success,error) => {
+      if(!myContributors.length){
+        return success("Uh.Oh. No Contributors Yet!");
+      }
+      Contributor.bulkCreate(myContributors)
+      .then((myContributors) => success(myContributors))
+      .catch((err) => error(err));
     });
   }
-  cronStoreCommits(myCommits) {
+
+  storePullRequests(myPulls){
+    return new Promise((success,error) => {
+      if(!myPulls.length){
+        return success("Uh.Oh. No Pull Requests Yet!");
+      }  
+      PullRequest.bulkCreate(myPulls)
+      .then((myPulls) => success(myPulls))
+      .catch((err) => error(err));
+    });
+  }
+
+  cronStoreCommits(myCommits){
     if(!myCommits.length){
      return console.log("Uh, Oh. No Commits Yet!");
     }

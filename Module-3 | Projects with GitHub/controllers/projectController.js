@@ -3,9 +3,21 @@ const Project = require('../models/projectModel');
 const ProjectController = {
   
   projectList : (req,res) => {
-    Project.findAll().then(projects => {
-      res.send(projects);
-    });
+    Project.findAll()
+    .then(projects => res.send(projects))
+    .catch((err) => res.status(400).send(err.parent.detail));
+  },
+
+  getProjectById : (req,res) => {
+    const projectId = req.params.id;
+
+    Project.findAll({
+      where:{
+        id:projectId
+      }
+    })
+    .then(projects => res.send(projects))
+    .catch((err) => res.status(400).send(err.parent.detail));
   },
 
   createProject : (req,res) => {
@@ -17,12 +29,8 @@ const ProjectController = {
       name: data.name, 
       description: data.description
     })
-    .then(() => {
-    res.status(201).json("New Project Added!");
-    })
-    .catch((err) =>{
-    res.status(400).send(err.parent.detail);
-    });
+    .then(() => res.status(201).json("New Project Added!"))
+    .catch((err) => res.status(400).send(err.parent.detail));
   }
 }
 

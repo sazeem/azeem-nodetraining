@@ -8,7 +8,10 @@ const RepoController = {
     const projectId = req.params.id;
     const repoName = req.params.repoName;
     const login = req.query.login;
-
+    
+    if(!login){
+      return res.status(400).send("Please Enter Username in the Query as '?login=user_name'");
+    }
     Repo.findAll({
       where:{
         project_id:projectId,
@@ -19,9 +22,13 @@ const RepoController = {
     .then((repos) => {
       if(!repos.length){
         const Github = new RequestGitHub(token,login,repoName);
-        return Github.requestForRepo(projectId,res);
+        return new Promise((success,error) => {
+          Github.requestForRepo(projectId)
+          .then((response) => success(res.status(201).send(response)))
+          .catch((err) => error(err));
+        });      
       }
-      res.status(200).send(repos);
+      res.status(200).send(repos);        
     })
     .catch((err) => {
       res.status(400).send(err);
@@ -36,14 +43,9 @@ const RepoController = {
         project_id:projectId
       }
     })
-    .then((repos) => {
-      res.status(200).send(repos);  
-    })
-    .catch((err) => {
-      res.status(400).send(err);
-    });
+    .then((repos) => res.status(200).send(repos))
+    .catch((err) => res.status(400).send(err));
   }
-
 }
 
 module.exports = RepoController;
