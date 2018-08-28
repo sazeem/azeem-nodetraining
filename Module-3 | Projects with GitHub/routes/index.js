@@ -6,7 +6,9 @@ const contributorRoutes = require('./contributorRoutes');
 const pullRequestRoutes = require('./pullRequestRoutes');
 
 const routes = (app) => {
-	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(bodyParser.urlencoded({ 
+		extended: true 
+	}));
 	app.use(bodyParser.json());
   app.use(`/`, projectRoutes());
   app.use(`/`, repoRoutes());
