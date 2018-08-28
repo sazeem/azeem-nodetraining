@@ -1,8 +1,14 @@
 const http = require('http');
 const express = require('express');
+const bodyParser = require('body-parser');
 const routes =require('./routes');
 const CronService = require('./services/cronService');
 const app = express();
+
+app.use(bodyParser.urlencoded({ 
+  extended: true 
+}));
+app.use(bodyParser.json());
 
 CronService.commits();
 CronService.pullRequests();
