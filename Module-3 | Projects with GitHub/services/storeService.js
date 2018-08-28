@@ -17,7 +17,7 @@ class StoreService {
   storeCommits(myCommits){
     return new Promise((success,error) => {
       if(!myCommits.length){
-        return success("Uh.Oh. No Commits Yet!");
+        return error("Uh.Oh. No Commits Yet!");
       }
       Commit.bulkCreate(myCommits)
       .then((myCommits) => success(myCommits))
@@ -28,7 +28,7 @@ class StoreService {
   storeContributors(myContributors){
     return new Promise((success,error) => {
       if(!myContributors.length){
-        return success("Uh.Oh. No Contributors Yet!");
+        return error("Uh.Oh. No Contributors Yet!");
       }
       Contributor.bulkCreate(myContributors)
       .then((myContributors) => success(myContributors))
@@ -39,7 +39,7 @@ class StoreService {
   storePullRequests(myPulls){
     return new Promise((success,error) => {
       if(!myPulls.length){
-        return success("Uh.Oh. No Pull Requests Yet!");
+        return error("Uh.Oh. No Pull Requests Yet!");
       }  
       PullRequest.bulkCreate(myPulls)
       .then((myPulls) => success(myPulls))
@@ -57,6 +57,42 @@ class StoreService {
         if(changes){
           console.log(myCommit);
           console.log("Commit Added!");  
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    })
+  }
+
+  cronStorePullRequests(myPulls){
+    if(!myPulls.length){
+     return console.log("Uh, Oh. No Pull Requests Yet!");
+    }
+    _.forEach(myPulls,(myPull) => {
+      PullRequest.upsert(myPull)
+      .then((changes) => {
+        if(changes){
+          console.log(myPull);
+          console.log("Pull Request Added!");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    })
+  }
+
+  cronStoreContributors(myContributors){
+    if(!myContributors.length){
+     return console.log("Uh, Oh. No Contributors Yet!");
+    }
+    _.forEach(myContributors,(myContributor) => {
+      Contributor.upsert(myContributor)
+      .then((changes) => {
+        if(changes){
+          console.log(myContributor);
+          console.log("Contributor Added!");  
         }
       })
       .catch((err) => {

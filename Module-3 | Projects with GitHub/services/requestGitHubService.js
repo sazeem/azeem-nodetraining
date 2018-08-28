@@ -185,6 +185,72 @@ class RequestGitHub {
       });
     });
   }
+
+  cronRequestForPullRequests(login,repoName){
+    Request.get({
+      "headers": { 
+        "content-type" : "application/json",
+        "User-Agent":"sazeem",
+        "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" 
+      },
+      "url": `https://api.github.com/repos/${login}/${repoName}/pulls`
+    },(error, response, body) => {
+      if(error) {
+        return console.dir(error);
+      }
+      const myResponse = JSON.parse(body);  
+      
+      Repo.findAll({
+        attributes:["id"],
+        where:{ name:repoName }
+      })
+      .then((repos) => {
+        try{
+          const Mapper = new MapperService(myResponse);
+          const myPulls = Mapper.pullRequestMapper(repos,repoName);
+          const Store = new StoreService();
+
+          Store.cronStorePullRequests(myPulls);
+        }
+        catch(error){
+          console.log(error);
+        }
+      });
+    });
+  }
+
+  cronRequestForContributors(login,repoName){
+    Request.get({
+      "headers": { 
+        "content-type" : "application/json",
+        "User-Agent":"sazeem",
+        "Authorization" : "Basic c2F6ZWVtOjMxZTRmYmE2NWUzODgzMGQ1OWM0NDhlNmY0MzVlYjk5N2JlOTM1ZTA=" 
+      },
+      "url": `https://api.github.com/repos/${login}/${repoName}/contributors`
+    },(error, response, body) => {
+      if(error) {
+        return console.dir(error);
+      }
+      const myResponse = JSON.parse(body);  
+      
+      Repo.findAll({
+        attributes:["id"],
+        where:{ name:repoName }
+      })
+      .then((repos) => {
+        try{
+          const Mapper = new MapperService(myResponse);
+          const myContributors = Mapper.contributorMapper(repos,repoName);
+          const Store = new StoreService();
+
+          Store.cronStoreContributors(myContributors);
+        }
+        catch(error){
+          console.log(error);
+        }
+      });
+    });
+  }
 }
 
 module.exports = RequestGitHub;

@@ -1,5 +1,5 @@
 const Project = require('../models/projectModel');
-
+const Repo = require('../models/repoModel')
 const ProjectController = {
   
   projectList : (req,res) => {
@@ -16,8 +16,8 @@ const ProjectController = {
         id:projectId
       }
     })
-    .then(projects => res.send(projects))
-    .catch((err) => res.status(400).send(err.parent.detail));
+    .then((projects) => res.status(200).send(projects))
+    .catch((err) => res.status(400).send(err));
   },
 
   createProject : (req,res) => {

@@ -1,4 +1,5 @@
 const Repo = require('../models/repoModel');
+const Project = require('../models/projectModel');
 const RequestGitHub = require('../services/requestGitHubService');
 
 const RepoController = {
@@ -41,7 +42,10 @@ const RepoController = {
     Repo.findAll({
       where:{
         project_id:projectId
-      }
+      },
+      include:[{
+        model:Project
+      }]
     })
     .then((repos) => res.status(200).send(repos))
     .catch((err) => res.status(400).send(err));
