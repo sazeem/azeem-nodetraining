@@ -2,7 +2,6 @@ const Request = require('request');
 const Repo = require('../models/repoModel');
 const MapperService = require('./objectMapperService');
 const StoreService = require('./storeService');
-const _ = require('lodash');
 
 class RequestGitHub {
 
@@ -106,7 +105,7 @@ class RequestGitHub {
             const Mapper = new MapperService(myResponse);
             const myContributors = Mapper.contributorMapper(repos,this.repoName);
             const Store = new StoreService();
-            console.log(myContributors);
+
             Store.storeContributors(myContributors)
             .then((myContributors) => success(myContributors))
             .catch((err) => error(err));
