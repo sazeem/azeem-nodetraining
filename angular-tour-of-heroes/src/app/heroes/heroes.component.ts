@@ -10,6 +10,8 @@ import { HeroService } from '../hero.service';
 })
 export class HeroesComponent implements OnInit {
   heroes: Hero[];
+  showSpinner:boolean = true;
+  lastId: number;
 
   constructor(private heroService: HeroService) { }
 
@@ -17,10 +19,11 @@ export class HeroesComponent implements OnInit {
     this.getHeroes();
   }
   
-  add(name: string): void {
+  add(name: string): void {    
     name = name.trim();
     if (!name) { return; }
-    this.heroService.addHero({ name } as Hero)
+    this.lastId = this.lastId+1;
+    this.heroService.addHero({id:this.lastId,name:name} as Hero)
       .subscribe(hero => {
         this.heroes.push(hero);
       });
@@ -28,11 +31,18 @@ export class HeroesComponent implements OnInit {
 
   getHeroes(): void {
     this.heroService.getHeroes()
-    .subscribe(heroes => this.heroes = heroes);
+    .subscribe(heroes => {
+      this.lastId = heroes[heroes.length-1].id;
+      this.heroes = heroes;
+      this.showSpinner = false;
+    });
   }
 
   delete(hero: Hero): void {
+    if(hero.id === this.lastId){
+      this.lastId = this.lastId-1;      
+    }
     this.heroes = this.heroes.filter(h => h !== hero);
-    this.heroService.deleteHero(hero).subscribe();
+    this.heroService.deleteHero(hero).subscribe();    
   }
 }

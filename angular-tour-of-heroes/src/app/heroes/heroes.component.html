@@ -1,8 +1,9 @@
 <h2>My Heroes</h2>
+<loading-spinner *ngIf="showSpinner"></loading-spinner>
 <div>
   <label>Hero name:
     <input #heroName />
-  </label>  
+  </label>
   <button (click)="add(heroName.value); heroName.value=''">
     add
   </button>
