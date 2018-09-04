@@ -19,7 +19,7 @@ export class HeroesComponent implements OnInit {
     this.getHeroes();
   }
   
-  add(name: string): void {    
+  add(name: string): void {
     name = name.trim();
     if (!name) { return; }
     this.lastId = this.lastId+1;

@@ -53,7 +53,7 @@ export class HeroService {
       catchError(this.handleError<Hero>('addHero'))
     );
   }
-  
+
   updateHero (hero: Hero): Observable<any> {    
     return this.http.put(this.heroesUrl, hero, httpOptions)
     .pipe(
