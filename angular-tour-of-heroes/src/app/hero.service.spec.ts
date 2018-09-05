@@ -1,15 +1,21 @@
-import { TestBed, inject } from '@angular/core/testing';
-
+import { TestBed, async, inject } from '@angular/core/testing';
 import { HeroService } from './hero.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-describe('HeroService', () => {
+fdescribe('HeroService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HeroService]
+      imports: [
+        HttpClientTestingModule,
+      ],
+      providers: [
+        HeroService
+      ],
     });
   });
 
-  it('should be created', inject([HeroService], (service: HeroService) => {
+  it('# Should Be Created', inject([HttpTestingController,HeroService], (httpMock: HttpTestingController,service: HeroService) => {
     expect(service).toBeTruthy();
   }));
+
 });

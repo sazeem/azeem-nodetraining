@@ -7,7 +7,7 @@ const _ = require('lodash');
 app.use(express.json());
 app.use(bodyParser());
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4250');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -49,7 +49,7 @@ app.get('/heroes/:id', (req,res) => {
     if(value.id == id){
       return res.status(200).send(value);
     }
-  })  
+  })
 });
 
 app.post('/heroes',(req,res) => {
@@ -81,5 +81,5 @@ app.delete('/heroes/:id',(req,res) => {
   })
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3500;
 app.listen(port, () => console.log(`Listening on port ${port}..`));

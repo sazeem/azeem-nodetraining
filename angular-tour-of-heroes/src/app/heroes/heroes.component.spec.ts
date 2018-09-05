@@ -1,25 +1,28 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterModule, Routes } from '@angular/router';
 import { HeroesComponent } from './heroes.component';
+import { LoadingSpinnerComponent} from '../loading-spinner/loading-spinner.component';
 
-describe('HeroesComponent', () => {
-  let component: HeroesComponent;
-  let fixture: ComponentFixture<HeroesComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ HeroesComponent ]
-    })
-    .compileComponents();
-  }));
+fdescribe('Hello Test', () => {
+  let expected = '';
+  let notExpected = '';
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeroesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    expected = 'Hello World';
+    notExpected = 'Hello world';
+  })
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => {
+    expected = '';
+    notExpected = '';
+  })
+
+  it('Checks if Hello World is Hello World', ()=>{
+    expect('Hello World').toBe(expected);
   });
-});
+  
+  it('Checks if Hello World is not Hello world', ()=>{
+    expect('Hello World').not.toBe(notExpected);
+  });
+  
+})
