@@ -19,7 +19,7 @@ describe('LoadingSpinnerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('# Should Create Loading Spinner Component', () => {
     expect(component).toBeTruthy();
   });
 });

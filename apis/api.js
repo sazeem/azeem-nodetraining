@@ -14,6 +14,7 @@ app.use(function (req, res, next) {
 
   next();
 });
+
 const heroes = [
   { id: 11, name: 'Mr. Nicest' },
   { id: 12, name: 'Narco' },
@@ -40,7 +41,7 @@ app.get('/heroes', (req,res) => {
   }
   setTimeout(function() {
     return res.status(200).send(heroes);
-  }, 1000);
+  }, 500);
 });
 
 app.get('/heroes/:id', (req,res) => {
