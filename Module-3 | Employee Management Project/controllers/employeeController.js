@@ -2,8 +2,13 @@ const employees = require('../models/employeeModel');
 const _ = require('lodash');
 
 exports.employeeList = (req,res) => {
+  let limit = req.query.limit;
+  let page = req.query.page;
 
-  employees.findAll()
+  employees.findAll({
+    limit: limit,
+    offset: (page-1)*(limit)
+  })
    .then(employees => {  
     res.send(employees);
    })

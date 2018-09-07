@@ -2,10 +2,15 @@ const projects = require('../models/projectModel');
 const employees = require('../models/employeeModel');
 const roles = require('../models/roleModel');
 const works = require('../models/workModel');
-const Sequelize = require('sequelize');
 
 exports.projectList = (req,res) => {
-  projects.findAll().then(projects => {
+  let limit = req.query.limit;
+  let page = req.query.page;
+
+  projects.findAll({
+    limit: limit,
+    offset: (page-1)*(limit)
+  }).then(projects => {
     res.send(projects);
   })
 }
