@@ -1,0 +1,22 @@
+{
+  "name": "Module-3 | Projects with GitHub",
+  "version": "1.0.0",
+  "description": "Storing and accessing projects from GitHub",
+  "main": "index.js",
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2"
+  },
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Syed Azeem",
+  "license": "ISC"
+}
