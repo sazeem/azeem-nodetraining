@@ -4,7 +4,7 @@ mw = require('../controllers/middleware');
 
 const roleRoutes =() => {
   const roleRoutes = express.Router();
-  roleRoutes.get('/roles',RoleController.getRole);
+  roleRoutes.get('/roles',RoleController.getRoles);
   roleRoutes.post('/roles',RoleController.createRole);
   return roleRoutes;
 }

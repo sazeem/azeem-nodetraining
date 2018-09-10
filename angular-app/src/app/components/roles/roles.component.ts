@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectService} from '../../services/project.service';
 import {Roles} from '../../models/roles';
+import { RoleResponse } from '../../models/role.response';
 
 @Component({
   selector: 'app-roles',
@@ -8,6 +9,8 @@ import {Roles} from '../../models/roles';
   styleUrls: ['./roles.component.css']
 })
 export class RolesComponent implements OnInit {  
+  roleResponse:RoleResponse;
+
   roles: Roles[];
   showSpinner:boolean = true;
   constructor(private projectService: ProjectService) { }
@@ -17,8 +20,8 @@ export class RolesComponent implements OnInit {
   }
   getRoles(): void {
     this.projectService.getRoles()
-    .subscribe(roles => {
-      this.roles = roles;
+    .subscribe(response => {
+      this.roles = response.items;
       this.showSpinner = false;
     });
   }

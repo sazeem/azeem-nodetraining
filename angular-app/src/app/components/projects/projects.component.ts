@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectService} from '../../services/project.service';
 import {Projects} from '../../models/projects';
+import { ProjectResponse } from '../../models/project.response';
 
 @Component({
   selector: 'app-projects',
@@ -17,8 +18,8 @@ export class ProjectsComponent implements OnInit {
   }
   getProjects(): void {
     this.projectService.getProjects()
-    .subscribe(projects => {
-      this.projects = projects;
+    .subscribe(response => {
+      this.projects = response.items;
       this.showSpinner = false;
     });
   }

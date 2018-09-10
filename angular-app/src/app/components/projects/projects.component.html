@@ -24,8 +24,10 @@
   <li>
     <span class="badge"><b>ID</b></span> <b>PROJECT NAME</b>
   </li>
-  <li *ngFor="let project of projects | paginate:{ itemsPerPage:3, currentPage:p }">    
+  <li *ngFor="let project of projects">    
       <span class="badge">{{project.id}}</span> {{project.name}}
   </li>
 </ul>
-<pagination-controls (pageChange)="p =$event"></pagination-controls>
+<app-pager [page]="projectService.projectPage"
+[totalPages]="projectService.totalProjectPages"
+(changePage)="projectService.projectPage = $event; getProjects();"></app-pager>

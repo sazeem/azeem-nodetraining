@@ -21,8 +21,10 @@
   <li>
     <span class="badge"><b>ID</b></span> <b>EMPLOYEE NAME</b> 
   </li>
-  <li *ngFor="let employee of employees | paginate:{ itemsPerPage:5, currentPage:p }">    
+  <li *ngFor="let employee of employees">
       <span class="badge">{{employee.id}}</span> {{employee.name}} 
   </li>  
 </ul>
-<pagination-controls (pageChange)="p =$event"></pagination-controls>
+<app-pager [page]="projectService.employeePage"
+[totalPages]="projectService.totalEmployeePages"
+(changePage)="projectService.employeePage = $event; getEmployees();"></app-pager>

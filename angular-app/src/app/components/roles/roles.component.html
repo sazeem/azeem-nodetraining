@@ -15,8 +15,10 @@
   <li>
     <span class="badge"><b>ID</b></span> <b>ROLE NAME</b>
   </li>
-  <li *ngFor="let role of roles | paginate: { itemsPerPage:3, currentPage:p }">
+  <li *ngFor="let role of roles">
       <span class="badge">{{role.id}}</span> {{role.name}}
   </li>
 </ul>
-<pagination-controls (pageChange)="p =$event"></pagination-controls>
+<app-pager [page]="projectService.rolePage"
+[totalPages]="projectService.totalRolePages"
+(changePage)="projectService.rolePage = $event; getRoles();"></app-pager>
