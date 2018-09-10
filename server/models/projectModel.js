@@ -5,10 +5,8 @@ const employees = require('./employeeModel');
 const projects = mapper.define('projects', {
   
   id: {
-
     type: Sequelize.INTEGER, 
     primaryKey: true, 
-    autoIncrement: true 
   },
 
   name:{

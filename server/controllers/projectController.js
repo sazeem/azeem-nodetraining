@@ -65,19 +65,21 @@ exports.getProjectById = (req,res) => {
 
 exports.createProject = (req,res) => {
   const data = { 
+    "id"          : req.body.id,
     "name"        : req.body.name, 
     "manager_id"  : req.body.manager_id, 
     "duration"    : req.body.duration,
     "cost"        : req.body.cost 
   }; 
   projects.create({
+    id        : data.id,
     name      : data.name, 
     manager_id: data.manager_id, 
     duration  : data.duration, 
     cost      : data.cost
   })
   .then(() => {
-    res.status(201).json("New Project Added!");
+    res.status(201).send(req.body);
   })
   .catch((err) =>{
     res.status(400).send(err.parent.detail);

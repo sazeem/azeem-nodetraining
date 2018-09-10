@@ -8,14 +8,16 @@ exports.getRole = (req,res) => {
 }
 
 exports.createRole = (req,res) => {
-  const data = {     
+  const data = {
+    "id":req.body.id,
     "name":req.body.name
   }; 
   roles.create({
+    id:data.id,
     name:data.name
   })
   .then(() => {
-    res.status(201).json("New Role Added!");
+    res.status(201).send(req.body);
   })
   .catch((err) =>{
     res.status(400).send(err.parent.detail);

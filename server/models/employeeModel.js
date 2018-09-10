@@ -7,7 +7,6 @@ const employees = mapper.define('employees', {
 
     type: Sequelize.INTEGER, 
     primaryKey: true, 
-    autoIncrement: true 
   },
 
   name:{
