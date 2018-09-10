@@ -1,0 +1,28 @@
+<h2>My Employees</h2>
+<loading-spinner *ngIf="showSpinner"></loading-spinner>
+<div class = "employees">
+  <label>Employee Id:
+    <input #employeeId />
+  </label><br/>
+  <label>Employee Name:
+    <input #employeeName />
+  </label><br/>
+  <label>Employee Salary:
+    <input #employeeSalary />
+  </label><br/>
+  <label>Reporting Manager:
+    <input #employeeMentor />
+  </label><br/>
+  <button (click)="add(employeeId.value,employeeName.value,employeeSalary.value,employeeMentor.value); employeeId.value=''; employeeName.value='';employeeSalary.value='';employeeMentor.value='';">
+    add
+  </button>
+</div>
+<ul class="employees">
+  <li>
+    <span class="badge"><b>ID</b></span> <b>EMPLOYEE NAME</b> 
+  </li>
+  <li *ngFor="let employee of employees | paginate:{ itemsPerPage:5, currentPage:p }">    
+      <span class="badge">{{employee.id}}</span> {{employee.name}} 
+  </li>  
+</ul>
+<pagination-controls (pageChange)="p =$event"></pagination-controls>

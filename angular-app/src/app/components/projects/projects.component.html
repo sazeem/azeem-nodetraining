@@ -1,0 +1,31 @@
+<h2>My Projects</h2>
+<loading-spinner *ngIf="showSpinner"></loading-spinner>
+<div class = "projects">
+  <label>Project Id:
+    <input #projectId />
+  </label><br/>
+  <label>Project Name:
+    <input #projectName />
+  </label><br/>
+  <label>Project Duration:
+    <input #duration/>
+  </label><br/>
+  <label>Project Cost:
+    <input #cost/>
+  </label><br/>
+  <label>Project Manager:
+    <input #manager />
+  </label><br/>
+  <button (click)="add(projectId.value,projectName.value,duration.value,cost.value,manager.value);manager.value=''; cost.value=''; duration.value='';projectName.value='';projectId.value='';">
+    add
+  </button>
+</div>
+<ul class="projects">
+  <li>
+    <span class="badge"><b>ID</b></span> <b>PROJECT NAME</b>
+  </li>
+  <li *ngFor="let project of projects | paginate:{ itemsPerPage:3, currentPage:p }">    
+      <span class="badge">{{project.id}}</span> {{project.name}}
+  </li>
+</ul>
+<pagination-controls (pageChange)="p =$event"></pagination-controls>
