@@ -3,11 +3,24 @@ const Repo = require('../models/repoModel')
 const ProjectController = {
   
   projectList : (req,res) => {
-    Project.findAll()
-    .then(projects => res.send(projects))
-    .catch((err) => res.status(400).send(err.parent.detail));
-  },
+    let limit = req.query.limit;
+    let page = req.query.page;
+    let totalItems = 0;
 
+    Project.findAll()
+    .then(totalProjects => {
+      totalItems = totalProjects.length;
+      Project.findAll({
+        limit: limit,
+        offset: (page-1)*(limit)
+      }).then(projects => {
+        let data = {};
+        data.totalItems = totalItems;
+        data.items = projects;
+        res.send(data);
+      })
+    });    
+  },
   getProjectById : (req,res) => {
     const projectId = req.params.id;
 

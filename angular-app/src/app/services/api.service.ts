@@ -1,9 +1,3 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ApiService {
-
-  constructor() { }
-}
+export const ApiService = {  
+  projectUrl: `http://localhost:3000/projects`,
+};

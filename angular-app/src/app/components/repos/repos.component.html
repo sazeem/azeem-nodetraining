@@ -1,3 +1,31 @@
-<p>
-  repos works!
-</p>
+<div>  
+  <loading-spinner *ngIf="showSpinner"></loading-spinner>
+  <br/>
+  <br/>
+  <div class ="center-div">
+    <label>Project Id:
+      <input #projectId />
+    </label><br/>
+    <button (click)="login(projectId.value); projectId.value='' ">
+      Get Repos!
+    </button>
+    <br/>
+    <br/>
+  </div>  
+  <table class = "table">
+    <tr class="header__item">
+      <td class="table-data">My Repos</td>
+    </tr>
+    <tr class = table-row>
+      <td class="table-data">ID</td>
+      <td class="table-data">REPO NAME</td>
+    </tr>
+    <tr *ngFor="let repo of repos" class = table-row>
+      <td class="table-data">{{repo.id}}</td> 
+      <td class="table-data"> {{repo.name}}</td>
+    </tr>
+  </table>
+</div>
+<app-pager *ngIf = "repos" [page]="projectService.repoPage"
+  [totalPages]="projectService.totalRepoPages"
+  (changePage)="projectService.repoPage = $event; getRepos();"></app-pager>
