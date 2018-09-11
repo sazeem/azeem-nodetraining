@@ -1,30 +1,41 @@
-<h2>My Employees</h2>
 <loading-spinner *ngIf="showSpinner"></loading-spinner>
-<div class = "employees">
-  <label>Employee Id:
+<br/>
+<br/>
+<table class="table">
+  <tr class="header__item">
+    <td class = "table-data">My Employees</td>
+  </tr>
+  <tr class = "table-row">
+    <td class = "table-data">ID</td>
+    <td class = "table-data">EMPLOYEE NAME</td>
+  </tr>
+  <tr class = "table-row" *ngFor="let employee of employees">
+      <td class = "table-data"> {{employee.id}} </td>
+      <td class = "table-data"> {{employee.name}} </td> 
+  </tr>  
+</table>
+<app-pager [page]="projectService.employeePage"
+[totalPages]="projectService.totalEmployeePages"
+(changePage)="projectService.employeePage = $event; getEmployees();"></app-pager>
+<br/>
+<br/>
+<h2>Add Employee</h2>
+<br/>
+<div class = "center-div">
+  <label>Employee Id:<br/>
     <input #employeeId />
   </label><br/>
-  <label>Employee Name:
+  <label>Employee Name:<br/>
     <input #employeeName />
   </label><br/>
-  <label>Employee Salary:
+  <label>Employee Salary:<br/>
     <input #employeeSalary />
   </label><br/>
-  <label>Reporting Manager:
+  <label>Reporting Manager:<br/>
     <input #employeeMentor />
   </label><br/>
   <button (click)="add(employeeId.value,employeeName.value,employeeSalary.value,employeeMentor.value); employeeId.value=''; employeeName.value='';employeeSalary.value='';employeeMentor.value='';">
     add
-  </button>
+  </button>  
 </div>
-<ul class="employees">
-  <li>
-    <span class="badge"><b>ID</b></span> <b>EMPLOYEE NAME</b> 
-  </li>
-  <li *ngFor="let employee of employees">
-      <span class="badge">{{employee.id}}</span> {{employee.name}} 
-  </li>  
-</ul>
-<app-pager [page]="projectService.employeePage"
-[totalPages]="projectService.totalEmployeePages"
-(changePage)="projectService.employeePage = $event; getEmployees();"></app-pager>
+

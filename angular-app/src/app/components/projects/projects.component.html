@@ -1,33 +1,43 @@
-<h2>My Projects</h2>
 <loading-spinner *ngIf="showSpinner"></loading-spinner>
-<div class = "projects">
-  <label>Project Id:
+<br/>
+<br/>
+<table class="table">
+  <tr class = "header__item">
+    <td class = "table-data">My Projects</td>
+  </tr>
+  <tr class = "table-row">
+    <td class = "table-data">ID</td>
+    <td class = "table-data">PROJECT NAME</td>
+  </tr>
+  <tr class = "table-row" *ngFor="let project of projects">    
+    <td class = "table-data">{{project.id}}</td>
+    <td class = "table-data">{{project.name}}</td>
+  </tr>
+</table>
+<app-pager [page]="projectService.projectPage"
+[totalPages]="projectService.totalProjectPages"
+(changePage)="projectService.projectPage = $event; getProjects();"></app-pager>
+<br/>
+<br/>
+<h2>Add Employee</h2>
+<br/>  
+<div class = "center-div">
+  <label>Project Id:<br/>
     <input #projectId />
   </label><br/>
-  <label>Project Name:
+  <label>Project Name:<br/>
     <input #projectName />
   </label><br/>
-  <label>Project Duration:
+  <label>Project Duration:<br/>
     <input #duration/>
   </label><br/>
-  <label>Project Cost:
+  <label>Project Cost:<br/>
     <input #cost/>
   </label><br/>
-  <label>Project Manager:
+  <label>Project Manager:<br/>
     <input #manager />
   </label><br/>
   <button (click)="add(projectId.value,projectName.value,duration.value,cost.value,manager.value);manager.value=''; cost.value=''; duration.value='';projectName.value='';projectId.value='';">
     add
   </button>
 </div>
-<ul class="projects">
-  <li>
-    <span class="badge"><b>ID</b></span> <b>PROJECT NAME</b>
-  </li>
-  <li *ngFor="let project of projects">    
-      <span class="badge">{{project.id}}</span> {{project.name}}
-  </li>
-</ul>
-<app-pager [page]="projectService.projectPage"
-[totalPages]="projectService.totalProjectPages"
-(changePage)="projectService.projectPage = $event; getProjects();"></app-pager>

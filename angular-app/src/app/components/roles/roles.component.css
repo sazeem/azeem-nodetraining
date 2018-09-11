@@ -1,3 +1,30 @@
+.center-div {
+  text-align: center;
+}
+
+.table {
+  width:100%;
+}
+
+.table-header {
+  display:flex;
+  width:100%;
+  background:lightpink;
+  padding:10px;
+  text-align: center;
+}
+
+.table-row {
+  display:flex;
+  width:100%;
+  padding:10px; 
+}
+
+.table-data, .header__item {
+  flex: 1 1 20%;
+  text-align:center;
+}
+
 .roles {
     margin: 0 0 2em 0;
     list-style-type: none;

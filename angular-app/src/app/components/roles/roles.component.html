@@ -1,24 +1,34 @@
-<h2>My Roles</h2>
 <loading-spinner *ngIf="showSpinner"></loading-spinner>
-<div class = "roles">
+<br/>
+<br/>
+<table class="table">
+  <tr class="header__item">
+    <td class="table-data">My Roles</td>
+  </tr>
+  <tr class="table-row">
+    <td class="table-data">ID</td>
+    <td class="table-data">Role Name</td>
+  </tr>
+  <tr class="table-row" *ngFor="let role of roles">
+    <td class="table-data">{{role.id}}</td>  
+    <td class="table-data">{{role.name}}</td>  
+  </tr>
+</table>
+<app-pager [page]="projectService.rolePage"
+[totalPages]="projectService.totalRolePages"
+(changePage)="projectService.rolePage = $event; getRoles();"></app-pager>
+<br/>
+<br/>
+<h2>Add Role</h2>
+<br/>  
+<div class = "center-div">
   <label>Role Id:<br/>
     <input #roleId />
   </label><br/>
-  <label>Role Name:
+  <label>Role Name:<br/>
     <input #roleName />
   </label><br/>  
   <button (click)="add(roleId.value,roleName.value); roleId.value=''; roleName.value='';">
     add
   </button>
 </div>
-<ul class="roles">
-  <li>
-    <span class="badge"><b>ID</b></span> <b>ROLE NAME</b>
-  </li>
-  <li *ngFor="let role of roles">
-      <span class="badge">{{role.id}}</span> {{role.name}}
-  </li>
-</ul>
-<app-pager [page]="projectService.rolePage"
-[totalPages]="projectService.totalRolePages"
-(changePage)="projectService.rolePage = $event; getRoles();"></app-pager>

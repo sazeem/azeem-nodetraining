@@ -21,7 +21,7 @@ const ProjectController = {
         data.items = projects;
         res.send(data);
       })
-    });    
+    });
   },
   assignEmpToProject : (req,res) => {
   
