@@ -14,9 +14,9 @@
       <td class = "table-data"> {{employee.name}} </td> 
   </tr>  
 </table>
-<app-pager [page]="projectService.employeePage"
-[totalPages]="projectService.totalEmployeePages"
-(changePage)="projectService.employeePage = $event; getEmployees();"></app-pager>
+<app-pager [page]="paginationService.getPage(paginationService.employeeUrl)"
+[totalPages]="paginationService.totalPages"
+(changePage)="paginationService.setPage(paginationService.employeeUrl,$event); getEmployees();"></app-pager>
 <br/>
 <br/>
 <h2>Add Employee</h2>
@@ -38,4 +38,3 @@
     add
   </button>  
 </div>
-

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectService} from '../../services/project.service';
-import {EmployeeResponse} from '../../models/employee.response';
+import {ProjectService} from '../../shared/services/project.service';
+import {PaginationService} from '../../shared/services/pagination.service';
 import {Employees} from '../../models/employees';
-import { RoleResponse } from '../../models/role.response';
-import { ProjectResponse } from '../../models/project.response';
 
 @Component({
   selector: 'app-employees',
@@ -16,7 +14,10 @@ export class EmployeesComponent implements OnInit {
   showSpinner:boolean = true;
   totalItems:number = 0;
 
-  constructor(private projectService: ProjectService) { }
+  constructor(
+    private projectService: ProjectService,
+    private paginationService: PaginationService
+  ) { }
 
   ngOnInit() {
     this.getEmployees();

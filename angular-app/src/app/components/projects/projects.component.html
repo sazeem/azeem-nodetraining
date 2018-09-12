@@ -14,9 +14,9 @@
     <td class = "table-data">{{project.name}}</td>
   </tr>
 </table>
-<app-pager [page]="projectService.projectPage"
-[totalPages]="projectService.totalProjectPages"
-(changePage)="projectService.projectPage = $event; getProjects();"></app-pager>
+<app-pager [page]="paginationService.getPage(paginationService.projectUrl)"
+[totalPages]="paginationService.totalPages"
+(changePage)="paginationService.setPage(paginationService.projectUrl,$event); getProjects();"></app-pager>
 <br/>
 <br/>
 <h2>Add Employee</h2>

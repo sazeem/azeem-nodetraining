@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectService} from '../../services/project.service';
+import {ProjectService} from '../../shared/services/project.service';
+import {PaginationService} from '../../shared/services/pagination.service';
 import {Roles} from '../../models/roles';
 import { RoleResponse } from '../../models/role.response';
 
@@ -13,7 +14,10 @@ export class RolesComponent implements OnInit {
 
   roles: Roles[];
   showSpinner:boolean = true;
-  constructor(private projectService: ProjectService) { }
+  constructor(
+    private projectService: ProjectService,
+    private paginationService: PaginationService
+  ) { }
 
   ngOnInit() {
     this.getRoles();

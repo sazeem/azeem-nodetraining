@@ -9,9 +9,9 @@ import { ProjectsComponent } from './components/projects/projects.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 import { ProjectDetailsComponent } from './components/project-details/project-details.component';
-import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { PagerComponent } from './components/pager/pager.component';
+import { PagerComponent } from './shared/pager/pager.component';
 
 @NgModule({
   declarations: [
