@@ -16,6 +16,6 @@
     </tr>
   </table>
 </div>
-<app-pager [page]="projectService.projectPage"
-[totalPages]="projectService.totalProjectPages"
-(changePage)="projectService.projectPage = $event; getProjects();"></app-pager>
+<app-pager [page]="paginationService.getPage('projects')"
+[totalPages]="paginationService.totalPages"
+(changePage)="paginationService.setPage('projects',$event); getProjects();"></app-pager>

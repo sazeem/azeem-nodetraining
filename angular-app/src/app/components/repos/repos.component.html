@@ -6,9 +6,14 @@
     <label>Project Id:
       <input #projectId />
     </label><br/>
-    <button (click)="login(projectId.value); projectId.value='' ">
+    <button [disabled] = "projectId.value" (click)="login(projectId.value); projectId.value=''">
       Get Repos!
     </button>
+    <br/>
+    <br/>
+    <label>
+      Current Project: {{_projectId}}
+    </label>
     <br/>
     <br/>
   </div>  
@@ -26,6 +31,6 @@
     </tr>
   </table>
 </div>
-<app-pager *ngIf = "repos" [page]="projectService.repoPage"
-  [totalPages]="projectService.totalRepoPages"
-  (changePage)="projectService.repoPage = $event; getRepos();"></app-pager>
+<app-pager [page]="paginationService.getPage('repos')"
+  [totalPages]="paginationService.totalPages"
+  (changePage)="paginationService.setPage('repos',$event); getRepos();"></app-pager>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectService} from '../../services/project.service';
+import {ProjectService} from '../../shared/services/project.service';
+import {PaginationService} from '../../shared/services/pagination.service';
 import {Repo} from '../../models/repos';
-import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-repos',
@@ -10,24 +10,30 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class ReposComponent implements OnInit {
   repos: Repo[];
-  projectId:number;
+  _projectId:number;
   showSpinner:boolean;
 
+  get projectId(){
+     return this._projectId;
+  }
+  set projectId(val: number) {
+    if (val !== this.projectId) {
+      this._projectId = val;
+    }
+  }
+  
   page:number;
   limit:number;
 
   constructor(
     private projectService: ProjectService,
-    private activatedRoute: ActivatedRoute
+    private paginationService: PaginationService
   ) { }
 
-  ngOnInit() {
-    this.activatedRoute.queryParams.subscribe((params: Params) => {
-      this.page = params['page'];
-      this.limit = params['limit'];      
-    });
+  ngOnInit() {    
+    this.login(this.projectId);
   }
-  login(projectId):void {
+  login(projectId=1):void {
     this.projectId = projectId;
     this.getRepos();
   }

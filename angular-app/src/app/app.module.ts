@@ -5,8 +5,8 @@ import { FormsModule }    from '@angular/forms';
 import { AppComponent } from './app.component';
 import { RoutesModule } from './routes/routes.module';
 import { ProjectsComponent } from './components/projects/projects.component';
-import { PagerComponent } from './components/pager/pager.component';
-import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { PagerComponent } from './shared/pager/pager.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { ReposComponent } from './components/repos/repos.component';
 
 @NgModule({
